@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlantenBestelling-REST", "KlantenBestelling-REST\KlantenBestelling-REST.csproj", "{76A81C11-0BF1-401E-A0D8-B84B29DF4AB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KlantenBestelling-REST", "KlantenBestelling-REST\KlantenBestelling-REST.csproj", "{76A81C11-0BF1-401E-A0D8-B84B29DF4AB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLayer", "DomainLayer\DomainLayer.csproj", "{B43EDD27-4A27-459A-B0E6-C282362BBBA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainLayer", "DomainLayer\DomainLayer.csproj", "{B43EDD27-4A27-459A-B0E6-C282362BBBA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{3F908F77-1682-4D89-B9E3-810C30A98C30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B43EDD27-4A27-459A-B0E6-C282362BBBA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B43EDD27-4A27-459A-B0E6-C282362BBBA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B43EDD27-4A27-459A-B0E6-C282362BBBA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F908F77-1682-4D89-B9E3-810C30A98C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F908F77-1682-4D89-B9E3-810C30A98C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F908F77-1682-4D89-B9E3-810C30A98C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F908F77-1682-4D89-B9E3-810C30A98C30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

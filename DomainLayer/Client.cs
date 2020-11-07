@@ -8,29 +8,31 @@ namespace DomainLayer
     public class Client
     {
         public int Id { get; set; }
-        public string  Name { get; private set; }
-        public string Adres { get; private set; }
-        public HashSet<Order> Orders { get; private set; } = new HashSet<Order>();
+        private string _name;
+        public string  Name { get => _name; set { if (string.IsNullOrEmpty(value)) { throw new ArgumentException(); } _name = value; } }
+        private string _adres;
+        public string Adres { get => _adres; set { if (value.Length >= 10) { throw new ArgumentException(); } _adres = value; } }
+        private readonly List<Order> _orders = new List<Order>();
 
         public Client(string name, string adres)
         {
-            if (string.IsNullOrEmpty(name) && adres.Length >= 10)
-                throw new ArgumentException();
-            else {
                 Name = name;
                 Adres = adres;
-            }
         }
-        public void addOrder(Order order) 
+        public void AddOrder(Order order) 
         {
             if (order.Client == this)
             {
-                Orders.Add(order);
+                _orders.Add(order);
             }
             else 
             {
                 throw new ArgumentException("client is not the same.");
             }
+        }
+        public IReadOnlyList<Order> GetOrders() 
+        {
+            return _orders.AsReadOnly();
         }
     }
 }

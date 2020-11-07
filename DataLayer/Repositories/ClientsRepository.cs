@@ -19,54 +19,60 @@ namespace DataLayer.Repositories
 
         public int AddClient(Client client)
         {
-            using (context) 
-            {
-                if (context.Clients.Any(c => c.Name == client.Name && c.Adres == client.Adres))
-                    throw new Exception("client already in database");
-
-                DClient dclient = Mapper.FromClientToDClient(client);
-                context.Add(dclient);
-                context.SaveChanges();
-                return dclient.Id;
-            }
+            //mag nog niet in databank zitten 
+            DClient dClient = Mapper.FromClientToDClient(client);
+            if (context.Clients.Any(c => c.Name == client.Name && c.Address == client.Address))
+            throw new Exception("Client already in database.");
+            //klant toevoegen
+            context.Add(dClient);
+            context.SaveChanges();
+            return dClient.ClientId;
         }
 
         public int DeleteClient(int id)
         {
-            using (context) 
-            {
-                if (!context.Clients.Any(c => c.Id == id))
-                    throw new Exception("Client not in database");
-                context.Clients.Remove(new DClient() { Id = id });
-                context.SaveChanges();
-                return id;
-            }
+
+            //kijk of het erinzit
+            if (!context.Clients.Any(c => c.ClientId == id))
+                throw new Exception("Client not in database.");
+            //met bestellingen => foutmelding 
+            if (context.Orders.Any(o => o.Client.ClientId == id))
+                throw new Exception("Client has orders.");
+            context.Clients.Remove(new DClient() { ClientId = id });
+            context.SaveChanges();
+            return id;
         }
 
         public Client GetClient(int id)
         {
-            using (context) 
-            {
-                if (!context.Clients.Any(c => c.Id == id))
-                    throw new Exception("Client not in database");
-                return Mapper.FromDClientToClient(context.Clients
-                    .Include(c => c.Orders)
-                    .AsNoTracking()
-                    .Single(c => c.Id == id));
-            }
+            //kijk of het erinzit
+            if (!context.Clients.Any(c => c.ClientId == id))
+                throw new Exception("Client not in database");
+            DClient dclient = context.Clients
+                        .Include(c => c.Orders)
+                        .Single(c => c.ClientId == id);
+            return Mapper.FromDClientToClient(dclient);
         }
 
         public int UpdateClient(Client client)
         {
-            using (context) 
-            {
-                if (!context.Clients.Any(c => c.Id == client.Id))
-                    throw new Exception("Client not in database");
-                DClient clientToUpdate = context.Clients.Single(c => c.Id == client.Id);
-                clientToUpdate = Mapper.FromClientToDClient(client); //kan zijn variabelen handmatig moet aangepast worden
-                context.SaveChanges();
-                return clientToUpdate.Id;
-            }
+            throw new NotImplementedException();
         }
+
+       
+
+        //    public int UpdateClient(Client client)
+        //    {
+        //        using (context) 
+        //        {
+        //            if (!context.Clients.Any(c => c.ClientId == client.Id))
+        //                throw new Exception("Client not in database");
+        //            DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
+        //            clientToUpdate = Mapper.FromClientToDClient(client); //kan zijn variabelen handmatig moet aangepast worden
+        //            context.SaveChanges();
+        //            return clientToUpdate.ClientId;
+        //        }
+        //    }
+        //}
     }
 }

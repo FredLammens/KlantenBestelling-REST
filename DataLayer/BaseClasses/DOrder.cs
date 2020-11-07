@@ -8,7 +8,8 @@ namespace DataLayer
 {
     public class DOrder
     {
-        public int Id { get; set; }
+        [Key]
+        public int OrderId { get; set; }
         [Required]
         public Product Product { get; set; }
         [Required]
@@ -26,6 +27,22 @@ namespace DataLayer
         {
             Amount = amount;
         }
+        public DOrder()
+        {
 
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DOrder order &&
+                   Product == order.Product &&
+                   Amount == order.Amount &&
+                   EqualityComparer<DClient>.Default.Equals(Client, order.Client);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Product, Amount, Client);
+        }
     }
 }

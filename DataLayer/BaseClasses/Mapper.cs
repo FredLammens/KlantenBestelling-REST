@@ -11,17 +11,24 @@ namespace DataLayer.BaseClasses
         {
             return new DOrder(order.Product, order.Amount, FromClientToDClient(order.Client));
         }
-        public static DClient FromClientToDClient(Client client) 
+        public static DClient FromClientToDClient(Client client) //voor adden hoeft orders niet mee 
         {
-            return new DClient(client.Name, client.Adres);
+            return new DClient(client.Name, client.Address);
         }
         public static Order FromDOrderToOrder(DOrder dorder) 
         {
             return new Order(dorder.Product, dorder.Amount, FromDClientToClient(dorder.Client));
         }
-        public static Client FromDClientToClient(DClient dclient) 
+        public static Client FromDClientToClient(DClient dclient)  //nagekeken
         {
-            return new Client(dclient.Name, dclient.Adres);
+            Client client = new Client(dclient.Name, dclient.Address);
+            HashSet<Order> orders = new HashSet<Order>();
+            foreach (DOrder dOrder in dclient.Orders)
+            {
+                orders.Add(new Order(dOrder.Product, dOrder.Amount, client));
+            }
+            client.Orders = orders;
+            return client;
         }
 
     }

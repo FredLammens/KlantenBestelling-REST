@@ -9,6 +9,6 @@ namespace DomainLayer.IRepositories
         int AddOrder(Order order);
         int UpdateOrder(Order order);
         Order GetOrder(int id);
-        int DeleteOrder(Order order);
+        int DeleteOrder(int id);
     }
 }

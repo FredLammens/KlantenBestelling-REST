@@ -41,7 +41,9 @@ namespace UnitTests.DataLayerTests
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
             Action act = () => uow.Orders.AddOrder(order, gettedClient.Id);
-            act.ShouldThrow<Exception>().Message.ShouldBe("Order already in database.");
+            act.ShouldNotThrow();
+            Order changedOrder = uow.Orders.GetOrder(1, 1);
+            changedOrder.Amount.ShouldBe(20);
         }
         [TestMethod]
         public void AddOrderNoClientIdProvided()

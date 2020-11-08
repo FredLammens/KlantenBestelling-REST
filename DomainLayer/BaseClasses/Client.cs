@@ -24,7 +24,7 @@ namespace DomainLayer
         {
             if (order.Client == this)
             {
-                if (!Orders.Add(order)) 
+                if (!Orders.Add(order))
                 {
                     Orders.TryGetValue(order, out Order orderInSet);
                     orderInSet.Amount = orderInSet.Amount + order.Amount;

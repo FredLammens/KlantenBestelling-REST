@@ -16,22 +16,30 @@ namespace DataLayer.Repositories
             this.context = context;
         }
 
-        public Order AddOrder(Order order,int clientID)
+        public Order AddOrder(Order order, int clientID)
         {
-            //mag nog niet in databank zitten 
+            //al in databank => amounts op tellen en updaten
             DOrder dOrder = Mapper.FromOrderToDOrder(order);
             if (context.Orders.Any(o => o.Amount == dOrder.Amount && o.Client.Name == dOrder.Client.Name && o.Client.Address == dOrder.Client.Address && o.Product == dOrder.Product))
-                throw new Exception("Order already in database.");
-            //klant toevoegen
-            if (clientID <= 0) 
             {
-                throw new Exception("No clientId provided.");
+                DOrder orderToUpdate = context.Orders.Single(o => o.Amount == dOrder.Amount && o.Client.Name == dOrder.Client.Name && o.Client.Address == dOrder.Client.Address && o.Product == dOrder.Product);
+                orderToUpdate.Amount = orderToUpdate.Amount + order.Amount;
+                context.SaveChanges();
+                return Mapper.FromDOrderToOrder(orderToUpdate);
             }
-            dOrder.Client = null;
-            dOrder.Client_Id = clientID;
+            else
+            {
+                //klant foreign key toevoegen
+                if (clientID <= 0)
+                {
+                    throw new Exception("No clientId provided.");
+                }
+                dOrder.Client = null;
+                dOrder.Client_Id = clientID;
                 context.Orders.Add(dOrder);
                 context.SaveChanges();
                 return Mapper.FromDOrderToOrder(dOrder);
+            }
         }
 
         public void DeleteOrder(int id, int clientId)
@@ -60,6 +68,7 @@ namespace DataLayer.Repositories
             DOrder orderToUpdate = context.Orders.Single(o => o.OrderId == order.Id && o.Client_Id == clientId);
             orderToUpdate.Amount = order.Amount;
             orderToUpdate.Product = order.Product;
+            context.SaveChanges();
             return Mapper.FromDOrderToOrder(orderToUpdate);
 
         }

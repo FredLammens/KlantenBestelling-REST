@@ -95,5 +95,24 @@ namespace UnitTests
             Action act = () => uow.Clients.DeleteClient(1);
             act.ShouldNotThrow();
         }
+        [TestMethod]
+        public void DeleteClientNotInDataBase() 
+        {
+            UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
+            //uow.Clients.DeleteClient(1);
+            Action act = () => uow.Clients.DeleteClient(1);
+            act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database.");
+        }
+        [TestMethod]
+        public void DeleteClientWithOrdersReturnException() 
+        {
+            UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
+            uow.Clients.AddClient(new Client("TestName", "Test"));
+            Client returned = uow.Clients.GetClient(1);
+            uow.Orders.AddOrder(new Order(Product.Duvel, 10, returned), returned.Id);
+            //uow.Clients.DeleteClient(1);
+            Action act = () => uow.Clients.DeleteClient(1);
+            act.ShouldThrow<Exception>().Message.ShouldBe("Client has orders.");
+        }
     }
 }

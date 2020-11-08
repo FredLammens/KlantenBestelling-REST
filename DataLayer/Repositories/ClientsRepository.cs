@@ -33,8 +33,6 @@ namespace DataLayer.Repositories
 
         public void DeleteClient(int id)
         {
-            using (context)
-            {
                 //kijk of het erinzit
                 if (!context.Clients.Any(c => c.ClientId == id))
                     throw new Exception("Client not in database.");
@@ -43,7 +41,6 @@ namespace DataLayer.Repositories
                     throw new Exception("Client has orders.");
                 context.Clients.Remove(context.Clients.Single(c => c.ClientId  == id));
                 context.SaveChanges();
-            }
         }
 
         public Client GetClient(int id)

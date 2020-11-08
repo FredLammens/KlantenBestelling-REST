@@ -15,7 +15,13 @@ namespace DataLayer.Repositories
         {
             this.context = context;
         }
-
+        /// <summary>
+        /// Adds order from client to database via the foreign key.
+        /// if order already is in database with the same client => adds amounts together and updates the database object.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="clientID"></param>
+        /// <returns></returns>
         public Order AddOrder(Order order, int clientID)
         {
             //al in databank => amounts op tellen en updaten
@@ -41,7 +47,11 @@ namespace DataLayer.Repositories
                 return Mapper.FromDOrderToOrder(dOrder);
             }
         }
-
+        /// <summary>
+        /// Deletes order from Client derived with ClientId from database
+        /// </summary>
+        /// <param name="id">id from order to delete</param>
+        /// <param name="clientId">clientId to remove link</param>
         public void DeleteOrder(int id, int clientId)
         {
             //check of order erin zit
@@ -50,7 +60,12 @@ namespace DataLayer.Repositories
             context.Orders.Remove(context.Orders.Single(o => o.OrderId == id));
             context.SaveChanges();
         }
-
+        /// <summary>
+        /// Gets order from Client derived with ClientId from database
+        /// </summary>
+        /// <param name="id">id from order to get</param>
+        /// <param name="clientId">clientId to get client link</param>
+        /// <returns></returns>
         public Order GetOrder(int id, int clientId)
         {
             //kijk of het erinzit
@@ -59,7 +74,12 @@ namespace DataLayer.Repositories
             DOrder dorder = context.Orders.Single(o => o.OrderId == id && o.Client_Id == clientId);
             return Mapper.FromDOrderToOrder(dorder);
         }
-
+        /// <summary>
+        /// Updates order from client derived with clientId from database
+        /// </summary>
+        /// <param name="order">order to update</param>
+        /// <param name="clientId">clientId for link</param>
+        /// <returns></returns>
         public Order UpdateOrder(Order order, int clientId)
         {
             //kijk of het erinzit

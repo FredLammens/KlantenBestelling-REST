@@ -19,6 +19,12 @@ namespace DataLayer
         public DClient Client { get; set; }
         [Required]
         public int Client_Id { get; set; }
+        /// <summary>
+        /// Data Order object
+        /// </summary>
+        /// <param name="product">product</param>
+        /// <param name="amount">amount</param>
+        /// <param name="client">client</param>
         public DOrder(Product product, int amount,DClient client)
         {
             Product = product;

@@ -16,7 +16,12 @@ namespace DataLayer.Repositories
         {
             this.context = context;
         }
-
+        /// <summary>
+        /// Adds client to database if not already in database. 
+        /// And returns client from database
+        /// </summary>
+        /// <param name="client">client to insert</param>
+        /// <returns></returns>
         public Client AddClient(Client client)
         {
             //mag nog niet in databank zitten 
@@ -30,7 +35,11 @@ namespace DataLayer.Repositories
             clientReturn.Id = dClient.ClientId;
             return clientReturn;
         }
-
+        /// <summary>
+        /// Deletes client from database with id given.
+        /// if in database and if client doesnt have any orders.
+        /// </summary>
+        /// <param name="id">id from client to delete</param>
         public void DeleteClient(int id)
         {
                 //kijk of het erinzit
@@ -42,7 +51,12 @@ namespace DataLayer.Repositories
                 context.Clients.Remove(context.Clients.Single(c => c.ClientId  == id));
                 context.SaveChanges();
         }
-
+        /// <summary>
+        /// Gets client with all orders from database with id given.
+        /// if client is in database.
+        /// </summary>
+        /// <param name="id">id from client to get</param>
+        /// <returns></returns>
         public Client GetClient(int id)
         {
             //kijk of het erinzit
@@ -53,7 +67,11 @@ namespace DataLayer.Repositories
                         .Single(c => c.ClientId == id);
             return Mapper.FromDClientToClient(dclient);
         }
-
+        /// <summary>
+        /// Updates client from database with id from client object and values from client object.
+        /// </summary>
+        /// <param name="client">client to update gotten from database</param>
+        /// <returns></returns>
         public Client UpdateClient(Client client)
         {
             if (!context.Clients.Any(c => c.ClientId == client.Id))

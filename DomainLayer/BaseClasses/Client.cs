@@ -9,8 +9,14 @@ namespace DomainLayer
     {
         public int Id { get; set; }
         private string _name;
+        /// <summary>
+        /// Checks if name is null or empty before setting
+        /// </summary>
         public string Name { get => _name; set { if (string.IsNullOrEmpty(value)) { throw new ArgumentException("Name can't be null or empty."); } _name = value; } }
         private string _address;
+        /// <summary>
+        /// Checks if aders is smaller than or equal to 10 characters or 
+        /// </summary>
         public string Address { get => _address; set { if (value.Length >= 10) { throw new ArgumentException("Adress can't be bigger or equal to 10 characters"); } _address = value; } }
         public HashSet<Order> Orders { private get; set; } = new HashSet<Order>();
 
@@ -19,7 +25,11 @@ namespace DomainLayer
             Name = name;
             Address = address;
         }
-
+        /// <summary>
+        /// if client is the same adds order to orders list.
+        /// If order is already in orders adds the amount together
+        /// </summary>
+        /// <param name="order">order to add</param>
         public void AddOrder(Order order)
         {
             if (order.Client == this)
@@ -35,6 +45,10 @@ namespace DomainLayer
                 throw new ArgumentException("client is not the same.");
             }
         }
+        /// <summary>
+        /// Returns the list as readonly
+        /// </summary>
+        /// <returns></returns>
         public IReadOnlyList<Order> GetOrders()
         {
             return Orders.ToList().AsReadOnly();

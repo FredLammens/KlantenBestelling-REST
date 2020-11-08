@@ -29,12 +29,9 @@ namespace DataLayer.Repositories
             }
             dOrder.Client = null;
             dOrder.Client_Id = clientID;
-            using (context) 
-            {
                 context.Orders.Add(dOrder);
                 context.SaveChanges();
                 return Mapper.FromDOrderToOrder(dOrder);
-            }
         }
 
         public void DeleteOrder(int id)

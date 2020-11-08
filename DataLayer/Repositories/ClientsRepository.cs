@@ -19,16 +19,16 @@ namespace DataLayer.Repositories
 
         public Client AddClient(Client client)
         {
-                //mag nog niet in databank zitten 
-                DClient dClient = Mapper.FromClientToDClient(client);
-                if (context.Clients.Any(c => c.Name == client.Name && c.Address == client.Address))
-                    throw new Exception("Client already in database.");
-                //klant toevoegen
-                context.Clients.Add(dClient);
-                context.SaveChanges();
-                Client clientReturn = new Client(dClient.Name, dClient.Address);
-                clientReturn.Id = dClient.ClientId;
-                return clientReturn;
+            //mag nog niet in databank zitten 
+            DClient dClient = Mapper.FromClientToDClient(client);
+            if (context.Clients.Any(c => c.Name == client.Name && c.Address == client.Address))
+                throw new Exception("Client already in database.");
+            //klant toevoegen
+            context.Clients.Add(dClient);
+            context.SaveChanges();
+            Client clientReturn = new Client(dClient.Name, dClient.Address);
+            clientReturn.Id = dClient.ClientId;
+            return clientReturn;
         }
 
         public void DeleteClient(int id)
@@ -57,16 +57,13 @@ namespace DataLayer.Repositories
 
         public Client UpdateClient(Client client)
         {
-            using (context)
-            {
-                if (!context.Clients.Any(c => c.ClientId == client.Id))
-                    throw new Exception("Client not in database");
-                DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
-                clientToUpdate.Address = client.Address;
-                clientToUpdate.Name = client.Name;
-                context.SaveChanges();
-                return Mapper.FromDClientToClient(clientToUpdate);
-            }
+            if (!context.Clients.Any(c => c.ClientId == client.Id))
+                throw new Exception("Client not in database");
+            DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
+            clientToUpdate.Address = client.Address;
+            clientToUpdate.Name = client.Name;
+            context.SaveChanges();
+            return Mapper.FromDClientToClient(clientToUpdate);
         }
     }
 }

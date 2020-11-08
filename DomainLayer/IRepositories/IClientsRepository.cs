@@ -7,8 +7,8 @@ namespace DomainLayer.IRepositories
     public interface IClientsRepository
     {
         Client AddClient(Client client);
-        int UpdateClient(Client client);
+        Client UpdateClient(Client client);
         Client GetClient(int id);
-        int DeleteClient(int id);
+        void DeleteClient(int id);
     }
 }

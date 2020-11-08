@@ -29,7 +29,7 @@ namespace DataLayer.Repositories
             return Mapper.FromDClientToClient(dClient);
         }
 
-        public int DeleteClient(int id)
+        public void DeleteClient(int id)
         {
 
             //kijk of het erinzit
@@ -40,7 +40,6 @@ namespace DataLayer.Repositories
                 throw new Exception("Client has orders.");
             context.Clients.Remove(new DClient() { ClientId = id });
             context.SaveChanges();
-            return id;
         }
 
         public Client GetClient(int id)
@@ -54,25 +53,19 @@ namespace DataLayer.Repositories
             return Mapper.FromDClientToClient(dclient);
         }
 
-        public int UpdateClient(Client client)
+        public Client UpdateClient(Client client)
         {
-            throw new NotImplementedException();
+            using (context)
+            {
+                if (!context.Clients.Any(c => c.ClientId == client.Id))
+                    throw new Exception("Client not in database");
+                DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
+                clientToUpdate.Address = client.Address;
+                clientToUpdate.Name = client.Name;
+                context.SaveChanges();
+                return Mapper.FromDClientToClient(clientToUpdate);
+            }
         }
-
-       
-
-        //    public int UpdateClient(Client client)
-        //    {
-        //        using (context) 
-        //        {
-        //            if (!context.Clients.Any(c => c.ClientId == client.Id))
-        //                throw new Exception("Client not in database");
-        //            DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
-        //            clientToUpdate = Mapper.FromClientToDClient(client); //kan zijn variabelen handmatig moet aangepast worden
-        //            context.SaveChanges();
-        //            return clientToUpdate.ClientId;
-        //        }
-        //    }
-        //}
     }
+}
 }

@@ -10,7 +10,7 @@ namespace UnitTests
     public class ClientRepositoryTests
     {
         [TestMethod]
-        public void AddClientNormalTest()
+        public void AddClientNormalNoExceptionsTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
@@ -35,7 +35,7 @@ namespace UnitTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Client already in database.");
         }
         [TestMethod]
-        public void GetClientNormal()
+        public void GetClientNormalNoExceptions()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
@@ -66,7 +66,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void UpdateClientNormalTest()
+        public void UpdateClientNormalNoExceptionsTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
@@ -85,6 +85,15 @@ namespace UnitTests
             Client client = new Client("TestName", "Test");
             Action act = () => uow.Clients.UpdateClient(client);
             act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database");
+        }
+        [TestMethod]
+        public void DeleteClientNormalNoExceptions() 
+        {
+            UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
+            uow.Clients.AddClient(new Client("TestName", "Test"));
+            //uow.Clients.DeleteClient(1);
+            Action act = () => uow.Clients.DeleteClient(1);
+            act.ShouldNotThrow();
         }
     }
 }

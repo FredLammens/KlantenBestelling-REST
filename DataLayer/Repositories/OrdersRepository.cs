@@ -16,16 +16,25 @@ namespace DataLayer.Repositories
             this.context = context;
         }
 
-        public int AddOrder(Order order)
+        public Order AddOrder(Order order,int clientID)
         {
             //mag nog niet in databank zitten 
             DOrder dOrder = Mapper.FromOrderToDOrder(order);
             if (context.Orders.Any(o => o.Amount == dOrder.Amount && o.Client.Name == dOrder.Client.Name && o.Client.Address == dOrder.Client.Address && o.Product == dOrder.Product))
                 throw new Exception("Order already in database.");
             //klant toevoegen
-            context.Orders.Add(dOrder);
-            context.SaveChanges();
-            return dOrder.OrderId;
+            if (clientID <= 0) 
+            {
+                throw new Exception("No clientId provided.");
+            }
+            dOrder.Client = null;
+            dOrder.Client_Id = clientID;
+            using (context) 
+            {
+                context.Orders.Add(dOrder);
+                context.SaveChanges();
+                return Mapper.FromDOrderToOrder(dOrder);
+            }
         }
 
         public int DeleteOrder(int id)

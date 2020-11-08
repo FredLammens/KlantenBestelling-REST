@@ -17,7 +17,7 @@ namespace DataLayer.Repositories
             this.context = context;
         }
 
-        public int AddClient(Client client)
+        public Client AddClient(Client client)
         {
             //mag nog niet in databank zitten 
             DClient dClient = Mapper.FromClientToDClient(client);
@@ -26,7 +26,7 @@ namespace DataLayer.Repositories
             //klant toevoegen
             context.Add(dClient);
             context.SaveChanges();
-            return dClient.ClientId;
+            return Mapper.FromDClientToClient(dClient);
         }
 
         public int DeleteClient(int id)

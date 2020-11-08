@@ -33,18 +33,5 @@ namespace DataLayer
         {
 
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is DOrder order &&
-                   Product == order.Product &&
-                   Amount == order.Amount &&
-                   EqualityComparer<DClient>.Default.Equals(Client, order.Client);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Product, Amount, Client);
-        }
     }
 }

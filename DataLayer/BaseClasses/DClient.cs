@@ -26,17 +26,5 @@ namespace DataLayer
         {
 
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is DClient client &&
-                   Name.Equals(client.Name) &&
-                   Address.Equals(client.Address);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Address);
-        }
     }
 }

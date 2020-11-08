@@ -37,10 +37,13 @@ namespace DataLayer.Repositories
             }
         }
 
-        public int DeleteOrder(int id)
+        public void DeleteOrder(int id)
         {
             //check of order erin zit
-            throw new NotImplementedException();
+            if (!context.Orders.Any(o => o.OrderId == id))
+                throw new Exception("Order not in database.");
+            context.Orders.Remove(new DOrder() { OrderId = id });
+            context.SaveChanges();
         }
 
         public Order GetOrder(int id)

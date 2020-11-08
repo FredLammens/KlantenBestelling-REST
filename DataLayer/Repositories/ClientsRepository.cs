@@ -19,14 +19,16 @@ namespace DataLayer.Repositories
 
         public Client AddClient(Client client)
         {
-            //mag nog niet in databank zitten 
-            DClient dClient = Mapper.FromClientToDClient(client);
-            if (context.Clients.Any(c => c.Name == client.Name && c.Address == client.Address))
-            throw new Exception("Client already in database.");
-            //klant toevoegen
-            context.Add(dClient);
-            context.SaveChanges();
-            return Mapper.FromDClientToClient(dClient);
+                //mag nog niet in databank zitten 
+                DClient dClient = Mapper.FromClientToDClient(client);
+                if (context.Clients.Any(c => c.Name == client.Name && c.Address == client.Address))
+                    throw new Exception("Client already in database.");
+                //klant toevoegen
+                context.Clients.Add(dClient);
+                context.SaveChanges();
+                Client clientReturn = new Client(dClient.Name, dClient.Address);
+                clientReturn.Id = dClient.ClientId;
+                return clientReturn;
         }
 
         public void DeleteClient(int id)
@@ -67,5 +69,4 @@ namespace DataLayer.Repositories
             }
         }
     }
-}
 }

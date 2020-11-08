@@ -7,9 +7,9 @@ namespace DataLayer.BaseClasses
 {
     public class Mapper
     {
-        public static DOrder FromOrderToDOrder(Order order) 
+        public static DOrder FromOrderToDOrder(Order order)
         {
-            return new DOrder(order.Product, order.Amount,FromClientToDClient(order.Client));
+            return new DOrder(order.Product, order.Amount, FromClientToDClient(order.Client));
         }
         public static DClient FromClientToDClient(Client client) //voor adden hoeft orders niet mee 
         {

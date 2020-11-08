@@ -9,9 +9,9 @@ namespace DomainLayer
     {
         public int Id { get; set; }
         private string _name;
-        public string Name { get => _name; set { if (string.IsNullOrEmpty(value)) { throw new ArgumentException(); } _name = value; } }
+        public string Name { get => _name; set { if (string.IsNullOrEmpty(value)) { throw new ArgumentException("Name can't be null or empty."); } _name = value; } }
         private string _address;
-        public string Address { get => _address; set { if (value.Length >= 10) { throw new ArgumentException(); } _address = value; } }
+        public string Address { get => _address; set { if (value.Length >= 10) { throw new ArgumentException("Adress can't be bigger or equal to 10 characters"); } _address = value; } }
         public HashSet<Order> Orders { private get; set; } = new HashSet<Order>();
 
         public Client(string name, string address)
@@ -50,11 +50,6 @@ namespace DomainLayer
         public override int GetHashCode()
         {
             return HashCode.Combine(_name, _address);
-        }
-
-        public override string ToString()
-        {
-            return $"ID: {Id} , Name: {Name}, Address: {Address}, Orders: {Orders.Count}";
         }
     }
 }

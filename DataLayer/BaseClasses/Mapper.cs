@@ -21,7 +21,7 @@ namespace DataLayer.BaseClasses
             order.Id = dorder.OrderId;
             return order;
         }
-        public static Client FromDClientToClient(DClient dclient)  //nagekeken
+        public static Client FromDClientToClient(DClient dclient)
         {
             Client client = new Client(dclient.Name, dclient.Address);
             HashSet<Order> orders = new HashSet<Order>();

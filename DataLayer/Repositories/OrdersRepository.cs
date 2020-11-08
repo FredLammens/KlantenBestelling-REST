@@ -34,25 +34,34 @@ namespace DataLayer.Repositories
                 return Mapper.FromDOrderToOrder(dOrder);
         }
 
-        public void DeleteOrder(int id)
+        public void DeleteOrder(int id, int clientId)
         {
             //check of order erin zit
-            if (!context.Orders.Any(o => o.OrderId == id))
+            if (!context.Orders.Any(o => o.OrderId == id && o.Client_Id == clientId))
                 throw new Exception("Order not in database.");
-            context.Orders.Remove(new DOrder() { OrderId = id });
+            context.Orders.Remove(context.Orders.Single(o => o.OrderId == id));
             context.SaveChanges();
         }
 
-        public Order GetOrder(int id)
+        public Order GetOrder(int id, int clientId)
         {
             //kijk of het erinzit
-            throw new NotImplementedException();
+            if (!context.Orders.Any(o => o.OrderId == id && o.Client_Id == clientId))
+                throw new Exception("Order not in database.");
+            DOrder dorder = context.Orders.Single(o => o.OrderId == id && o.Client_Id == clientId);
+            return Mapper.FromDOrderToOrder(dorder);
         }
 
-        public int UpdateOrder(Order order)
+        public Order UpdateOrder(Order order, int clientId)
         {
             //kijk of het erinzit
-            throw new NotImplementedException();
+            if (!context.Orders.Any(o => o.OrderId == order.Id && o.Client_Id == clientId))
+                throw new Exception("Order not in database.");
+            DOrder orderToUpdate = context.Orders.Single(o => o.OrderId == order.Id && o.Client_Id == clientId);
+            orderToUpdate.Amount = order.Amount;
+            orderToUpdate.Product = order.Product;
+            return Mapper.FromDOrderToOrder(orderToUpdate);
+
         }
     }
 }

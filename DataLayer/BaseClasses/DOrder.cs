@@ -15,14 +15,11 @@ namespace DataLayer
         public Product Product { get; set; }
         [Required]
         public int Amount { get; set; }
-        [Required]
+        [ForeignKey("Client_Id")]
         public DClient Client { get; set; }
-        /// <summary>
-        /// Data Order object
-        /// </summary>
-        /// <param name="product">product</param>
-        /// <param name="amount">amount</param>
-        /// <param name="client">client</param>
+        [Required]
+        public int Client_Id { get; set; }
+
         public DOrder(Product product, int amount,DClient client)
         {
             Product = product;

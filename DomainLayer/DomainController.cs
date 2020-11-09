@@ -21,6 +21,12 @@ namespace DomainLayer
         public Client AddClient(Client client)
         {
             Client addedClient = uow.Clients.AddClient(client);
+            //if client has order add orders
+            if (client.GetOrders().Count > 0) 
+            {
+                uow.Orders.AddOrders(client.GetOrders());
+            }
+            //add client
             uow.Complete();
             return addedClient;
         }
@@ -63,19 +69,25 @@ namespace DomainLayer
         /// <param name="order"></param>
         /// <param name="clientID"></param>
         /// <returns></returns>
-        public Order AddOrder(Order order, int clientID)
+        public Order AddOrder(Order order,int clientId)//? hoe door domein checks van client
         {
             //al in databank => amounts op tellen en updaten
-            return uow.Orders.AddOrder(order, clientID);
+            if (uow.Orders.IsInOrders(order)) 
+            {
+                Order origignalOrder = uow.Orders.GetOrder(order);
+                origignalOrder.Amount += order.Amount;
+                return uow.Orders.UpdateOrder(origignalOrder);
+            }else
+                return uow.Orders.AddOrder(order,clientId);
         }
         /// <summary>
         /// Deletes order from Client derived with ClientId from database
         /// </summary>
         /// <param name="id">id from order to delete</param>
         /// <param name="clientId">clientId to remove link</param>
-        public void DeleteOrder(int id, int clientId)
+        public void DeleteOrder(int id)
         {
-            uow.Orders.DeleteOrder(id, clientId);
+            uow.Orders.DeleteOrder(id);
         }
         /// <summary>
         /// Gets order from Client derived with ClientId from database
@@ -83,9 +95,9 @@ namespace DomainLayer
         /// <param name="id">id from order to get</param>
         /// <param name="clientId">clientId to get client link</param>
         /// <returns></returns>
-        public Order GetOrder(int id, int clientId)
+        public Order GetOrder(int id)
         {
-            return uow.Orders.GetOrder(id, clientId);
+            return uow.Orders.GetOrder(id);
         }
         /// <summary>
         /// Updates order from client derived with clientId from database
@@ -93,9 +105,9 @@ namespace DomainLayer
         /// <param name="order">order to update</param>
         /// <param name="clientId">clientId for link</param>
         /// <returns></returns>
-        public Order UpdateOrder(Order order, int clientId)
+        public Order UpdateOrder(Order order)
         {
-            return uow.Orders.UpdateOrder(order, clientId);
+            return uow.Orders.UpdateOrder(order);
         }
     }
 }

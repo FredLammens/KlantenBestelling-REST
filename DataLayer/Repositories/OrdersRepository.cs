@@ -21,11 +21,22 @@ namespace DataLayer.Repositories
         /// </summary>
         /// <param name="order">order to add</param>
         /// <returns></returns>
-        public Order AddOrder(Order order)
-        { 
+        public Order AddOrder(Order order, int clientId)
+        {
+            if (clientId <= 0)
+                throw new Exception("No clientId provided.");
             DOrder dOrder = Mapper.FromOrderToDOrder(order);
+            dOrder.Client = null;
+            dOrder.Client_Id = clientId;
             context.Orders.Add(dOrder);
-            return Mapper.FromDOrderToOrder(dOrder);
+            return Mapper.FromDOrderToOrder(dOrder); //does this gives the id with it if not yet saved ?
+        }
+        public void AddOrders(IReadOnlyList<Order> orders) 
+        {
+            foreach (Order order in orders)
+            {
+                AddOrder(order,order.Client.Id);
+            }
         }
         /// <summary>
         /// Deletes order from  database
@@ -56,6 +67,18 @@ namespace DataLayer.Repositories
             return Mapper.FromDOrderToOrder(dorder);
         }
 
+        public Order GetOrder(Order order)
+        {
+            //kijk of het erinzit
+            if (!context.Orders.Any((o => o.Amount == order.Amount && o.Product == order.Product && o.Client.Name == order.Client.Name && o.Client.Address == o.Client.Address)))
+                throw new Exception("Order not in database.");
+            DOrder dorder = context.Orders
+                .AsNoTracking()
+                .Include(o => o.Client)
+                .AsNoTracking()
+                .Single(o => o.Amount == order.Amount && o.Product == order.Product && o.Client.Name == order.Client.Name && o.Client.Address == o.Client.Address);
+            return Mapper.FromDOrderToOrder(dorder);
+        }
         public bool IsInOrders(Order order)
         {
             if (context.Orders.Any(o => o.Amount == order.Amount && o.Product == order.Product && o.Client.ClientId == order.Client.Id))

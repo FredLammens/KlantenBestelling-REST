@@ -20,7 +20,9 @@ namespace DomainLayer
         /// <returns></returns>
         public Client AddClient(Client client)
         {
-            return uow.Clients.AddClient(client);
+            Client addedClient = uow.Clients.AddClient(client);
+            uow.Complete();
+            return addedClient;
         }
         /// <summary>
         /// Deletes client from database with id given.
@@ -30,6 +32,7 @@ namespace DomainLayer
         public void DeleteClient(int id)
         {
             uow.Clients.DeleteClient(id);
+            uow.Complete();
         }
         /// <summary>
         /// Gets client with all orders from database with id given.
@@ -39,7 +42,8 @@ namespace DomainLayer
         /// <returns></returns>
         public Client GetClient(int id)
         {
-            return uow.Clients.GetClient(id);
+            Client gettedClient = uow.Clients.GetClient(id);
+            return gettedClient;
         }
         /// <summary>
         /// Updates client from database with id from client object and values from client object.
@@ -48,7 +52,9 @@ namespace DomainLayer
         /// <returns></returns>
         public Client UpdateClient(Client client)
         {
-            return uow.Clients.UpdateClient(client);
+            Client updatedClient = uow.Clients.UpdateClient(client);
+            uow.Complete();
+            return updatedClient;
         }
         /// <summary>
         /// Adds order from client to database via the foreign key.
@@ -59,7 +65,6 @@ namespace DomainLayer
         /// <returns></returns>
         public Order AddOrder(Order order, int clientID)
         {
-
             return uow.Orders.AddOrder(order, clientID);
         }
         /// <summary>

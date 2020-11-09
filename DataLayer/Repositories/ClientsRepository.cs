@@ -62,6 +62,7 @@ namespace DataLayer.Repositories
                 throw new Exception("Client not in database");
             DClient dclient = context.Clients
                         .Include(c => c.Orders)
+                        .AsNoTracking()
                         .Single(c => c.ClientId == id);
             return Mapper.FromDClientToClient(dclient);
         }

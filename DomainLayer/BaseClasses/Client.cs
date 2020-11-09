@@ -59,7 +59,13 @@ namespace DomainLayer
         {
             return orders.ToList().AsReadOnly();
         }
-        //remove order 
+        public void RemoveOrder(Order order) 
+        {
+            if (orders.Contains(order))
+                orders.Remove(order);
+            else
+                throw new Exception("order not found.");
+        }
 
         public override bool Equals(object obj)
         {

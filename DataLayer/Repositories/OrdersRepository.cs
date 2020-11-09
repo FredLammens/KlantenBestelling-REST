@@ -58,7 +58,6 @@ namespace DataLayer.Repositories
             if (!context.Orders.Any(o => o.OrderId == id && o.Client_Id == clientId))
                 throw new Exception("Order not in database.");
             context.Orders.Remove(context.Orders.Single(o => o.OrderId == id));
-            context.SaveChanges();
         }
         /// <summary>
         /// Gets order from Client derived with ClientId from database
@@ -88,7 +87,6 @@ namespace DataLayer.Repositories
             DOrder orderToUpdate = context.Orders.Single(o => o.OrderId == order.Id && o.Client_Id == clientId);
             orderToUpdate.Amount = order.Amount;
             orderToUpdate.Product = order.Product;
-            context.SaveChanges();
             return Mapper.FromDOrderToOrder(orderToUpdate);
 
         }

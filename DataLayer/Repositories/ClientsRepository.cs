@@ -30,7 +30,6 @@ namespace DataLayer.Repositories
                 throw new Exception("Client already in database.");
             //klant toevoegen
             context.Clients.Add(dClient);
-            context.SaveChanges();
             Client clientReturn = new Client(dClient.Name, dClient.Address);
             clientReturn.Id = dClient.ClientId;
             return clientReturn;
@@ -49,7 +48,6 @@ namespace DataLayer.Repositories
                 if (context.Orders.Any(o => o.Client.ClientId == id))
                     throw new Exception("Client has orders.");
                 context.Clients.Remove(context.Clients.Single(c => c.ClientId  == id));
-                context.SaveChanges();
         }
         /// <summary>
         /// Gets client with all orders from database with id given.
@@ -79,7 +77,6 @@ namespace DataLayer.Repositories
             DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
             clientToUpdate.Address = client.Address;
             clientToUpdate.Name = client.Name;
-            context.SaveChanges();
             return Mapper.FromDClientToClient(clientToUpdate);
         }
     }

@@ -17,7 +17,7 @@ namespace DomainLayer
         /// <summary>
         /// Checks if aders is smaller than or equal to 10 characters or 
         /// </summary>
-        public string Address { get => _address; set { if (value.Length >= 10) { throw new ArgumentException("Adress can't be bigger or equal to 10 characters"); } _address = value; } }
+        public string Address { get => _address; set { if (value.Length >= 10) throw new ArgumentException("Adress can't be bigger or equal to 10 characters"); if (string.IsNullOrEmpty(value)) throw new Exception("Address can't be null"); _address = value; } }
         private HashSet<Order> orders = new HashSet<Order>();
 
         public Client(string name, string address)

@@ -71,14 +71,21 @@ namespace DomainLayer
         /// <returns></returns>
         public Order AddOrder(Order order,int clientId)//? hoe door domein checks van client
         {
+            Order updatedOrder;
             //al in databank => amounts op tellen en updaten
-            if (uow.Orders.IsInOrders(order)) 
+            if (uow.Orders.IsInOrders(order))
             {
                 Order origignalOrder = uow.Orders.GetOrder(order);
                 origignalOrder.Amount += order.Amount;
-                return uow.Orders.UpdateOrder(origignalOrder);
-            }else
-                return uow.Orders.AddOrder(order,clientId);
+                updatedOrder = uow.Orders.UpdateOrder(origignalOrder);
+                uow.Complete();
+            }
+            else 
+            {
+                updatedOrder = uow.Orders.AddOrder(order, clientId);
+                uow.Complete();
+            }
+            return updatedOrder;
         }
         /// <summary>
         /// Deletes order from Client derived with ClientId from database
@@ -88,6 +95,7 @@ namespace DomainLayer
         public void DeleteOrder(int id)
         {
             uow.Orders.DeleteOrder(id);
+            uow.Complete();
         }
         /// <summary>
         /// Gets order from Client derived with ClientId from database
@@ -107,7 +115,9 @@ namespace DomainLayer
         /// <returns></returns>
         public Order UpdateOrder(Order order)
         {
-            return uow.Orders.UpdateOrder(order);
+            Order updatedOrder = uow.Orders.UpdateOrder(order);
+            uow.Complete();
+            return updatedOrder;
         }
     }
 }

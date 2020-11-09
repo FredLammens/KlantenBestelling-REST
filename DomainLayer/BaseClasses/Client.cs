@@ -15,7 +15,7 @@ namespace DomainLayer
         public string Name { get => _name; set { if (string.IsNullOrEmpty(value)) { throw new ArgumentException("Name can't be null or empty."); } _name = value; } }
         private string _address;
         /// <summary>
-        /// Checks if aders is smaller than or equal to 10 characters or 
+        /// Checks if address is smaller than or equal to 10 characters and is not empty 
         /// </summary>
         public string Address { get => _address; set { if (value.Length >= 10) throw new ArgumentException("Adress can't be bigger or equal to 10 characters"); if (string.IsNullOrEmpty(value)) throw new Exception("Address can't be null"); _address = value; } }
         private HashSet<Order> orders = new HashSet<Order>();

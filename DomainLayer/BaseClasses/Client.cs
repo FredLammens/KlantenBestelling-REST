@@ -18,13 +18,19 @@ namespace DomainLayer
         /// Checks if aders is smaller than or equal to 10 characters or 
         /// </summary>
         public string Address { get => _address; set { if (value.Length >= 10) { throw new ArgumentException("Adress can't be bigger or equal to 10 characters"); } _address = value; } }
-        public HashSet<Order> Orders { private get; set; } = new HashSet<Order>();
+        private HashSet<Order> orders = new HashSet<Order>();
 
         public Client(string name, string address)
         {
             Name = name;
             Address = address;
         }
+
+        public Client(string name, string address, HashSet<Order> orders) : this(name, address)
+        {
+            this.orders = orders;
+        }
+
         /// <summary>
         /// if client is the same adds order to orders list.
         /// If order is already in orders adds the amount together
@@ -34,10 +40,10 @@ namespace DomainLayer
         {
             if (order.Client == this)
             {
-                if (!Orders.Add(order))
+                if (!orders.Add(order))
                 {
-                    Orders.TryGetValue(order, out Order orderInSet);
-                    orderInSet.Amount = orderInSet.Amount + order.Amount;
+                    orders.TryGetValue(order, out Order orderInSet);
+                    orderInSet.Amount += order.Amount;
                 }
             }
             else
@@ -51,8 +57,9 @@ namespace DomainLayer
         /// <returns></returns>
         public IReadOnlyList<Order> GetOrders()
         {
-            return Orders.ToList().AsReadOnly();
+            return orders.ToList().AsReadOnly();
         }
+        //remove order 
 
         public override bool Equals(object obj)
         {

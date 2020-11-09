@@ -65,6 +65,7 @@ namespace DomainLayer
         /// <returns></returns>
         public Order AddOrder(Order order, int clientID)
         {
+            //al in databank => amounts op tellen en updaten
             return uow.Orders.AddOrder(order, clientID);
         }
         /// <summary>

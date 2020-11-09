@@ -21,12 +21,6 @@ namespace DomainLayer
             Client = client;
         }
 
-        public Order(Product product, int amount) //toegevoegd na feedback
-        {
-            Product = product;
-            Amount = amount;
-        }
-
         public override bool Equals(object obj)
         {
             return obj is Order order &&

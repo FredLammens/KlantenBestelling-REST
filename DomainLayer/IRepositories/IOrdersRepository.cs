@@ -6,9 +6,10 @@ namespace DomainLayer.IRepositories
 {
     public interface IOrdersRepository
     {
-        Order AddOrder(Order order, int clientId);
-        Order UpdateOrder(Order order, int clientId);
-        Order GetOrder(int id, int clientId);
-        void DeleteOrder(int id, int clientId);
+        Order AddOrder(Order order);
+        Order UpdateOrder(Order order);
+        Order GetOrder(int id);
+        void DeleteOrder(int id);
+        bool IsInOrders(Order order);
     }
 }

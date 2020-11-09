@@ -61,6 +61,7 @@ namespace DataLayer.Repositories
             if (!context.Clients.Any(c => c.ClientId == id))
                 throw new Exception("Client not in database");
             DClient dclient = context.Clients
+                        .AsNoTracking()
                         .Include(c => c.Orders)
                         .AsNoTracking()
                         .Single(c => c.ClientId == id);

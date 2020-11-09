@@ -15,10 +15,8 @@ namespace DataLayer
         public Product Product { get; set; }
         [Required]
         public int Amount { get; set; }
-        [ForeignKey("Client_Id")]
-        public DClient Client { get; set; }
         [Required]
-        public int Client_Id { get; set; }
+        public DClient Client { get; set; }
         /// <summary>
         /// Data Order object
         /// </summary>

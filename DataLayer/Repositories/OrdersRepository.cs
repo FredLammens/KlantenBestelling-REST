@@ -1,6 +1,7 @@
 ﻿using DataLayer.BaseClasses;
 using DomainLayer;
 using DomainLayer.IRepositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,75 +17,65 @@ namespace DataLayer.Repositories
             this.context = context;
         }
         /// <summary>
-        /// Adds order from client to database via the foreign key.
-        /// if order already is in database with the same client => adds amounts together and updates the database object.
+        /// Adds order to database
         /// </summary>
-        /// <param name="order"></param>
-        /// <param name="clientID"></param>
+        /// <param name="order">order to add</param>
         /// <returns></returns>
-        public Order AddOrder(Order order, int clientID)
-        {
-            //al in databank => amounts op tellen en updaten
+        public Order AddOrder(Order order)
+        { 
             DOrder dOrder = Mapper.FromOrderToDOrder(order);
-            if (context.Orders.Any(o => o.Amount == dOrder.Amount && o.Client.Name == dOrder.Client.Name && o.Client.Address == dOrder.Client.Address && o.Product == dOrder.Product))
-            {
-                DOrder orderToUpdate = context.Orders.Single(o => o.Amount == dOrder.Amount && o.Client.Name == dOrder.Client.Name && o.Client.Address == dOrder.Client.Address && o.Product == dOrder.Product);
-                orderToUpdate.Amount = orderToUpdate.Amount + order.Amount;
-                context.SaveChanges();
-                return Mapper.FromDOrderToOrder(orderToUpdate);
-            }
-            else
-            {
-                //klant foreign key toevoegen
-                if (clientID <= 0)
-                {
-                    throw new Exception("No clientId provided.");
-                }
-                dOrder.Client = null;
-                dOrder.Client_Id = clientID;
-                context.Orders.Add(dOrder);
-                context.SaveChanges();
-                return Mapper.FromDOrderToOrder(dOrder);
-            }
+            context.Orders.Add(dOrder);
+            return Mapper.FromDOrderToOrder(dOrder);
         }
         /// <summary>
-        /// Deletes order from Client derived with ClientId from database
+        /// Deletes order from  database
         /// </summary>
         /// <param name="id">id from order to delete</param>
-        /// <param name="clientId">clientId to remove link</param>
-        public void DeleteOrder(int id, int clientId)
+        public void DeleteOrder(int id)
         {
             //check of order erin zit
-            if (!context.Orders.Any(o => o.OrderId == id && o.Client_Id == clientId))
+            if (!context.Orders.Any(o => o.OrderId == id))
                 throw new Exception("Order not in database.");
             context.Orders.Remove(context.Orders.Single(o => o.OrderId == id));
         }
         /// <summary>
-        /// Gets order from Client derived with ClientId from database
+        /// Gets order from database
         /// </summary>
         /// <param name="id">id from order to get</param>
-        /// <param name="clientId">clientId to get client link</param>
         /// <returns></returns>
-        public Order GetOrder(int id, int clientId)
+        public Order GetOrder(int id)
         {
             //kijk of het erinzit
-            if (!context.Orders.Any(o => o.OrderId == id && o.Client_Id == clientId))
+            if (!context.Orders.Any(o => o.OrderId == id))
                 throw new Exception("Order not in database.");
-            DOrder dorder = context.Orders.Single(o => o.OrderId == id && o.Client_Id == clientId);
+            DOrder dorder = context.Orders
+                .AsNoTracking()
+                .Include(o => o.Client)
+                .AsNoTracking()
+                .Single(o => o.OrderId == id);
             return Mapper.FromDOrderToOrder(dorder);
         }
+
+        public bool IsInOrders(Order order)
+        {
+            if (context.Orders.Any(o => o.Amount == order.Amount && o.Product == order.Product && o.Client.ClientId == order.Client.Id))
+                return true;
+            else
+                return false;
+        }
+
         /// <summary>
         /// Updates order from client derived with clientId from database
         /// </summary>
         /// <param name="order">order to update</param>
         /// <param name="clientId">clientId for link</param>
         /// <returns></returns>
-        public Order UpdateOrder(Order order, int clientId)
+        public Order UpdateOrder(Order order)
         {
             //kijk of het erinzit
-            if (!context.Orders.Any(o => o.OrderId == order.Id && o.Client_Id == clientId))
+            if (!context.Orders.Any(o => o.OrderId == order.Id))
                 throw new Exception("Order not in database.");
-            DOrder orderToUpdate = context.Orders.Single(o => o.OrderId == order.Id && o.Client_Id == clientId);
+            DOrder orderToUpdate = context.Orders.Single(o => o.OrderId == order.Id);
             orderToUpdate.Amount = order.Amount;
             orderToUpdate.Product = order.Product;
             return Mapper.FromDOrderToOrder(orderToUpdate);

@@ -42,5 +42,21 @@ namespace UnitTests.DomainLayerTests
             client.AddOrder(new Order(Product.Westmalle, 5, client));
             client.GetOrders()[0].Amount.ShouldBe(15);
         }
+        [TestMethod]
+        public void GetOrdersTest() 
+        {
+            Client client = new Client("test", "tralala");
+            client.AddOrder(new Order(Product.Westmalle, 10, client));
+            client.GetOrders().Count.ShouldBe(1);
+        }
+        [TestMethod]
+        public void RemoveOrderTest() 
+        {
+            Client client = new Client("test", "tralala");
+            Order order = new Order(Product.Westmalle, 10, client);
+            client.AddOrder(order);
+            client.RemoveOrder(order);
+            client.GetOrders().Count.ShouldBe(0);
+        }
     }
 }

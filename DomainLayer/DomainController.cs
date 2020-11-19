@@ -27,8 +27,8 @@ namespace DomainLayer
                 uow.Orders.AddOrders(client.GetOrders());
             }
             //add client
-            Client addedClient = uow.Clients.GetClient(client.Name, client.Address);
             uow.Complete();
+            Client addedClient = uow.Clients.GetClient(client.Name, client.Address);
             return addedClient;
         }
         /// <summary>

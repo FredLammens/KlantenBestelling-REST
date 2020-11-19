@@ -26,11 +26,6 @@ namespace DomainLayer
             Address = address;
         }
 
-        public Client(string name, string address, HashSet<Order> orders) : this(name, address)
-        {
-            this.orders = orders;
-        }
-
         /// <summary>
         /// if client is the same adds order to orders list.
         /// If order is already in orders adds the amount together
@@ -66,7 +61,6 @@ namespace DomainLayer
             else
                 throw new Exception("order not found.");
         }
-
         public override bool Equals(object obj)
         {
             return obj is Client client &&

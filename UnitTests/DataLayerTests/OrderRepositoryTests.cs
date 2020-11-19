@@ -18,33 +18,21 @@ namespace UnitTests.DataLayerTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             //
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             Action act = () => uow.Orders.AddOrder(order,gettedClient.Id);
             act.ShouldNotThrow();
+            uow.Complete();
             Client returned = uow.Clients.GetClient(1);
             returned.GetOrders().Count.ShouldBe(1);
             returned.GetOrders()[0].Product.ShouldBe(order.Product);
             returned.GetOrders()[0].Amount.ShouldBe(order.Amount);
-            returned.GetOrders()[0].Client.ShouldBe(order.Client);
+            returned.GetOrders()[0].Client.Name.ShouldBe(client.Name);
+            returned.GetOrders()[0].Client.Address.ShouldBe(client.Address);
         }
-        [TestMethod]
-        public void AddOrderAlreadyInDatabase() 
-        {
-            //init db
-            UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
-            uow.Clients.AddClient(client);
-            //
-            Client gettedClient = uow.Clients.GetClient(1);
-            Order order = new Order(Product.Duvel, 10, gettedClient);
-            uow.Orders.AddOrder(order, gettedClient.Id);
-            Action act = () => uow.Orders.AddOrder(order, gettedClient.Id);
-            act.ShouldNotThrow();
-            Order changedOrder = uow.Orders.GetOrder(1);
-            changedOrder.Amount.ShouldBe(20);
-        }
+
         [TestMethod]
         public void AddOrderNoClientIdProvided()
         {
@@ -52,6 +40,7 @@ namespace UnitTests.DataLayerTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             //
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
@@ -65,10 +54,12 @@ namespace UnitTests.DataLayerTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             //
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
+            uow.Complete();
             Action act = () => uow.Orders.GetOrder(1);
             act.ShouldNotThrow();
             Order gettedOrder = uow.Orders.GetOrder(1);
@@ -95,14 +86,17 @@ namespace UnitTests.DataLayerTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             //
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
+            uow.Complete();
             Order getted = uow.Orders.GetOrder(1);
             getted.Product = Product.Westmalle;
             Action act = () => uow.Orders.UpdateOrder(getted);
             act.ShouldNotThrow();
+            uow.Complete();
             Order gettedOrder = uow.Orders.GetOrder(1);
             gettedOrder.Product.ShouldBe(Product.Westmalle);
         }
@@ -114,6 +108,7 @@ namespace UnitTests.DataLayerTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             //
             Order order = new Order(Product.Duvel, 10, client);
             Action act = () => uow.Orders.UpdateOrder(order);
@@ -126,12 +121,15 @@ namespace UnitTests.DataLayerTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             //
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
+            uow.Complete();
             Action act = () => uow.Orders.DeleteOrder(1);
             act.ShouldNotThrow();
+            uow.Complete();
             act = () => uow.Orders.GetOrder(1);
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }

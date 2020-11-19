@@ -43,13 +43,12 @@ namespace DataLayer.BaseClasses
         /// <returns></returns>
         public static Client FromDClientToClient(DClient dclient)
         {
-            HashSet<Order> orders = new HashSet<Order>();
+            Client client = new Client(dclient.Name, dclient.Address);
+            client.Id = dclient.ClientId;
             foreach (DOrder dOrder in dclient.Orders)
             {
-                orders.Add(new Order(dOrder.Product, dOrder.Amount));
-            }
-            Client client = new Client(dclient.Name, dclient.Address,orders);
-            client.Id = dclient.ClientId;
+                client.AddOrder(new Order(dOrder.Product,dOrder.Amount,client));
+            }          
             return client;
         }
 

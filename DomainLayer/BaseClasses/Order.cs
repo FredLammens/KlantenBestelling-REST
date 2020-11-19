@@ -11,7 +11,7 @@ namespace DomainLayer
         private int _amount;
         public int Amount { get => _amount; set { if (value < 0) throw new Exception("Amount can't be empty."); _amount = value;  } }
         private Client _client;
-        public Client Client { get => _client; set { if (value == null) throw new Exception("Client can't be empty"); _client = value; Client.AddOrder(this);  } }
+        public Client Client { get => _client; set { if (value == null) throw new Exception("Client can't be empty"); _client = value;} }
 
         public Order(Product product, int amount, Client client)
         {

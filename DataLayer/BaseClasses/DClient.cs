@@ -16,6 +16,7 @@ namespace DataLayer
         [Required]
         public string Address { get; set; }
         public List<DOrder> Orders { get; set; }
+
         /// <summary>
         /// Data Client object
         /// </summary>

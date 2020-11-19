@@ -42,7 +42,7 @@ namespace UnitTests.DataLayerTests
             uow.Orders.AddOrder(order, gettedClient.Id);
             Action act = () => uow.Orders.AddOrder(order, gettedClient.Id);
             act.ShouldNotThrow();
-            Order changedOrder = uow.Orders.GetOrder(1, 1);
+            Order changedOrder = uow.Orders.GetOrder(1);
             changedOrder.Amount.ShouldBe(20);
         }
         [TestMethod]
@@ -69,9 +69,9 @@ namespace UnitTests.DataLayerTests
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
-            Action act = () => uow.Orders.GetOrder(1, 1);
+            Action act = () => uow.Orders.GetOrder(1);
             act.ShouldNotThrow();
-            Order gettedOrder = uow.Orders.GetOrder(1, 1);
+            Order gettedOrder = uow.Orders.GetOrder(1);
             gettedOrder.Product.ShouldBe(order.Product);
             gettedOrder.Amount.ShouldBe(order.Amount);
             gettedOrder.Client.ShouldBe(order.Client);
@@ -84,7 +84,7 @@ namespace UnitTests.DataLayerTests
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
             //
-            Action act = () => uow.Orders.GetOrder(1, 1);
+            Action act = () => uow.Orders.GetOrder(1);
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
 
@@ -99,11 +99,11 @@ namespace UnitTests.DataLayerTests
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
-            Order getted = uow.Orders.GetOrder(1, 1);
+            Order getted = uow.Orders.GetOrder(1);
             getted.Product = Product.Westmalle;
-            Action act = () => uow.Orders.UpdateOrder(getted, 1);
+            Action act = () => uow.Orders.UpdateOrder(getted);
             act.ShouldNotThrow();
-            Order gettedOrder = uow.Orders.GetOrder(1, 1);
+            Order gettedOrder = uow.Orders.GetOrder(1);
             gettedOrder.Product.ShouldBe(Product.Westmalle);
         }
         [TestMethod]
@@ -116,7 +116,7 @@ namespace UnitTests.DataLayerTests
             uow.Clients.AddClient(client);
             //
             Order order = new Order(Product.Duvel, 10, client);
-            Action act = () => uow.Orders.UpdateOrder(order, 1);
+            Action act = () => uow.Orders.UpdateOrder(order);
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
         [TestMethod]
@@ -130,9 +130,9 @@ namespace UnitTests.DataLayerTests
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
             uow.Orders.AddOrder(order, gettedClient.Id);
-            Action act = () => uow.Orders.DeleteOrder(1, 1);
+            Action act = () => uow.Orders.DeleteOrder(1);
             act.ShouldNotThrow();
-            act = () => uow.Orders.GetOrder(1, 1);
+            act = () => uow.Orders.GetOrder(1);
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
         [TestMethod]
@@ -143,7 +143,7 @@ namespace UnitTests.DataLayerTests
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
             //
-            Action act = () => uow.Orders.DeleteOrder(1, 1);
+            Action act = () => uow.Orders.DeleteOrder(1);
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
     }

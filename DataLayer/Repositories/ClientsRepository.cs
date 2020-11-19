@@ -22,7 +22,7 @@ namespace DataLayer.Repositories
         /// </summary>
         /// <param name="client">client to insert</param>
         /// <returns></returns>
-        public Client AddClient(Client client)
+        public void AddClient(Client client)
         {
             //mag nog niet in databank zitten 
             DClient dClient = Mapper.FromClientToDClient(client);
@@ -30,9 +30,6 @@ namespace DataLayer.Repositories
                 throw new Exception("Client already in database.");
             //klant toevoegen
             context.Clients.Add(dClient);
-            Client clientReturn = new Client(dClient.Name, dClient.Address);
-            clientReturn.Id = dClient.ClientId;
-            return clientReturn;
         }
         /// <summary>
         /// Deletes client from database with id given.
@@ -58,7 +55,7 @@ namespace DataLayer.Repositories
         public Client GetClient(int id)
         {
             //kijk of het erinzit
-            if (!context.Clients.Any(c => c.ClientId == id))
+            if (!context.Clients.Any(c => c.ClientId== id))
                 throw new Exception("Client not in database");
             DClient dclient = context.Clients
                         .AsNoTracking()
@@ -67,19 +64,45 @@ namespace DataLayer.Repositories
                         .Single(c => c.ClientId == id);
             return Mapper.FromDClientToClient(dclient);
         }
+        public Client GetClient(string Name, string Address) 
+        {
+            if (!context.Clients.Any(c => c.Name == Name && c.Address == Address))
+                throw new Exception("Client not in database.");
+
+            DClient dclient = context.Clients
+                                     .AsNoTracking()
+                                     .Include(c => c.Orders)
+                                     .AsNoTracking()
+                                     .Single(c => c.Name == Name && c.Address == Address);
+            return Mapper.FromDClientToClient(dclient);
+        }
         /// <summary>
         /// Updates client from database with id from client object and values from client object.
         /// </summary>
         /// <param name="client">client to update gotten from database</param>
         /// <returns></returns>
-        public Client UpdateClient(Client client)
+        public void UpdateClient(Client client)
         {
             if (!context.Clients.Any(c => c.ClientId == client.Id))
                 throw new Exception("Client not in database");
-            DClient clientToUpdate = context.Clients.Single(c => c.ClientId == client.Id);
+            DClient clientToUpdate = context.Clients
+                                       .Include(c => c.Orders)
+                                       .Single(c => c.ClientId == client.Id);
             clientToUpdate.Address = client.Address;
             clientToUpdate.Name = client.Name;
-            return Mapper.FromDClientToClient(clientToUpdate);
         }
+        //Niet nodig
+        //public void DeleteAllOrdersFromClient(int clientId)
+        //{
+        //    if (!context.Clients.Any(c => c.ClientId == clientId))
+        //        throw new Exception("Client not in database");
+        //    DClient clientToUpdate = context.Clients
+        //                               .Include(c => c.Orders)
+        //                               .Single(c => c.ClientId == clientId);
+        //    if (clientToUpdate.Orders.Count > 0)
+        //    {
+        //        context.Orders.RemoveRange(clientToUpdate.Orders);
+        //    }
+        //}
     }
 }

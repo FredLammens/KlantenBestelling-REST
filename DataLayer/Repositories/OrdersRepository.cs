@@ -21,7 +21,7 @@ namespace DataLayer.Repositories
         /// </summary>
         /// <param name="order">order to add</param>
         /// <returns></returns>
-        public Order AddOrder(Order order, int clientId)
+        public void AddOrder(Order order, int clientId)
         {
             if (clientId <= 0)
                 throw new Exception("No clientId provided.");
@@ -29,7 +29,6 @@ namespace DataLayer.Repositories
             dOrder.Client = null;
             dOrder.Client_Id = clientId;
             context.Orders.Add(dOrder);
-            return Mapper.FromDOrderToOrder(dOrder); //does this gives the id with it if not yet saved ?
         }
         public void AddOrders(IReadOnlyList<Order> orders) 
         {
@@ -67,7 +66,7 @@ namespace DataLayer.Repositories
             return Mapper.FromDOrderToOrder(dorder);
         }
 
-        public Order GetOrder(Order order)
+        public Order GetOrderWithoutId(Order order)
         {
             //kijk of het erinzit
             if (!context.Orders.Any((o => o.Amount == order.Amount && o.Product == order.Product && o.Client.Name == order.Client.Name && o.Client.Address == o.Client.Address)))
@@ -93,7 +92,7 @@ namespace DataLayer.Repositories
         /// <param name="order">order to update</param>
         /// <param name="clientId">clientId for link</param>
         /// <returns></returns>
-        public Order UpdateOrder(Order order)
+        public void UpdateOrder(Order order)
         {
             //kijk of het erinzit
             if (!context.Orders.Any(o => o.OrderId == order.Id))
@@ -101,8 +100,6 @@ namespace DataLayer.Repositories
             DOrder orderToUpdate = context.Orders.Single(o => o.OrderId == order.Id);
             orderToUpdate.Amount = order.Amount;
             orderToUpdate.Product = order.Product;
-            return Mapper.FromDOrderToOrder(orderToUpdate);
-
         }
     }
 }

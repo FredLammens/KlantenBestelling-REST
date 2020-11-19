@@ -22,7 +22,9 @@ namespace UnitTests
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
-            Client returnedClient = uow.Clients.AddClient(client);
+            uow.Clients.AddClient(client);
+            uow.Complete();
+            Client returnedClient = uow.Clients.GetClient(client.Name, client.Address);
             returnedClient.Id.ShouldBe(1);
         }
         [TestMethod]
@@ -31,16 +33,30 @@ namespace UnitTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             Action act = () => uow.Clients.AddClient(client);
             act.ShouldThrow<Exception>().Message.ShouldBe("Client already in database.");
         }
         [TestMethod]
-        public void GetClientNormalNoExceptions()
+        public void GetClientWithIdNormalNoExceptions()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             Client returned = uow.Clients.GetClient(1);
+            returned.Id.ShouldBe(1);
+            returned.Name.ShouldBe(client.Name);
+            returned.Address.ShouldBe(client.Address);
+        }
+        [TestMethod]
+        public void GetClientWithNameAndAddressNormalNoExceptions()
+        {
+            UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
+            Client client = new Client("TestName", "Test");
+            uow.Clients.AddClient(client);
+            uow.Complete();
+            Client returned = uow.Clients.GetClient(client.Name,client.Address);
             returned.Id.ShouldBe(1);
             returned.Name.ShouldBe(client.Name);
             returned.Address.ShouldBe(client.Address);
@@ -58,8 +74,10 @@ namespace UnitTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             Client returned = uow.Clients.GetClient(1);
             uow.Orders.AddOrder(new Order(Product.Duvel, 10, returned),returned.Id);
+            uow.Complete();
             Client returnedWithOrders = uow.Clients.GetClient(1);
             returnedWithOrders.GetOrders().Count.ShouldBe(1);
 
@@ -71,10 +89,12 @@ namespace UnitTests
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test");
             uow.Clients.AddClient(client);
+            uow.Complete();
             Client returned = uow.Clients.GetClient(1);
             returned.Name = "Shabalaba";
             Action act = () => uow.Clients.UpdateClient(returned);
             act.ShouldNotThrow();
+            uow.Complete();
             Client updatedReturned = uow.Clients.GetClient(1);
             updatedReturned.Name.ShouldBe("Shabalaba");
         }
@@ -91,7 +111,7 @@ namespace UnitTests
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             uow.Clients.AddClient(new Client("TestName", "Test"));
-            //uow.Clients.DeleteClient(1);
+            uow.Complete();
             Action act = () => uow.Clients.DeleteClient(1);
             act.ShouldNotThrow();
         }
@@ -108,9 +128,10 @@ namespace UnitTests
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             uow.Clients.AddClient(new Client("TestName", "Test"));
+            uow.Complete();
             Client returned = uow.Clients.GetClient(1);
             uow.Orders.AddOrder(new Order(Product.Duvel, 10, returned), returned.Id);
-            //uow.Clients.DeleteClient(1);
+            uow.Complete();
             Action act = () => uow.Clients.DeleteClient(1);
             act.ShouldThrow<Exception>().Message.ShouldBe("Client has orders.");
         }

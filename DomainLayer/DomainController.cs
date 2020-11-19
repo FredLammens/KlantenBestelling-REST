@@ -20,13 +20,14 @@ namespace DomainLayer
         /// <returns></returns>
         public Client AddClient(Client client)
         {
-            Client addedClient = uow.Clients.AddClient(client);
+            uow.Clients.AddClient(client);
             //if client has order add orders
             if (client.GetOrders().Count > 0) 
             {
                 uow.Orders.AddOrders(client.GetOrders());
             }
             //add client
+            Client addedClient = uow.Clients.GetClient(client.Name, client.Address);
             uow.Complete();
             return addedClient;
         }
@@ -58,8 +59,9 @@ namespace DomainLayer
         /// <returns></returns>
         public Client UpdateClient(Client client)
         {
-            Client updatedClient = uow.Clients.UpdateClient(client);
+            uow.Clients.UpdateClient(client);
             uow.Complete();
+            Client updatedClient = uow.Clients.GetClient(client.Name, client.Address);
             return updatedClient;
         }
         /// <summary>
@@ -75,15 +77,16 @@ namespace DomainLayer
             //al in databank => amounts op tellen en updaten
             if (uow.Orders.IsInOrders(order))
             {
-                Order origignalOrder = uow.Orders.GetOrder(order);
-                origignalOrder.Amount += order.Amount;
-                updatedOrder = uow.Orders.UpdateOrder(origignalOrder);
+                updatedOrder = uow.Orders.GetOrderWithoutId(order);
+                updatedOrder.Amount += order.Amount;
+                uow.Orders.UpdateOrder(updatedOrder);
                 uow.Complete();
             }
             else 
             {
-                updatedOrder = uow.Orders.AddOrder(order, clientId);
+                uow.Orders.AddOrder(order, clientId);
                 uow.Complete();
+                updatedOrder = uow.Orders.GetOrderWithoutId(order);
             }
             return updatedOrder;
         }
@@ -115,8 +118,9 @@ namespace DomainLayer
         /// <returns></returns>
         public Order UpdateOrder(Order order)
         {
-            Order updatedOrder = uow.Orders.UpdateOrder(order);
+            uow.Orders.UpdateOrder(order);
             uow.Complete();
+            Order updatedOrder = uow.Orders.GetOrderWithoutId(order);
             return updatedOrder;
         }
     }

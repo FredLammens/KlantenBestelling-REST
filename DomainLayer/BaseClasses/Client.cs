@@ -25,6 +25,10 @@ namespace DomainLayer
             Name = name;
             Address = address;
         }
+        public Client()
+        {
+
+        }
 
         /// <summary>
         /// if client is the same adds order to orders list.

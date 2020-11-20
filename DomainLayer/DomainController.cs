@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DomainLayer
 {
-    public class DomainController
+    public class DomainController : IDomainController
     {
         private readonly IUnitOfWork uow;
 

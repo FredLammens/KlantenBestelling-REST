@@ -19,6 +19,10 @@ namespace DomainLayer
             Amount = amount;
             Client = client;
         }
+        public Order()
+        {
+
+        }
 
         public override bool Equals(object obj)
         {

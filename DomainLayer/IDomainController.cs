@@ -14,5 +14,6 @@ namespace DomainLayer
         void DeleteOrder(int id);
         Order GetOrder(int id);
         Order UpdateOrder(Order order);
+        bool IsInClients(int id);
     }
 }

@@ -91,6 +91,10 @@ namespace DataLayer.Repositories
             clientToUpdate.Address = client.Address;
             clientToUpdate.Name = client.Name;
         }
+        public bool IsInClients(int id) 
+        {
+            return context.Clients.Any(c => c.ClientId == id);
+        }
         //Niet nodig
         //public void DeleteAllOrdersFromClient(int clientId)
         //{

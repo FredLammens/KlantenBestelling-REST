@@ -25,5 +25,10 @@ namespace KlantenBestelling_REST.BaseClasses
         {
             return new ROrder(order.Id.ToString(), order.Product.ToString("f"), order.Amount, order.Client.Id.ToString());
         }
+        public static Client RClientToClient(RClient rclient)
+        {
+            Client client = new Client(rclient.Name, rclient.Address);
+            return client;
+        }
     }
 }

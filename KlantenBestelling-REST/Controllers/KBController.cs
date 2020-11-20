@@ -7,6 +7,7 @@ using DomainLayer;
 using KlantenBestelling_REST.BaseClasses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KlantenBestelling_REST.Controllers
 {
@@ -35,18 +36,43 @@ namespace KlantenBestelling_REST.Controllers
             }
         }
         [HttpPost]
-        public ActionResult<RClient> Post([FromBody] Client client) 
+        public ActionResult<RClient> Post([FromBody] RClient rclient) 
         {
+            //Rclient werkt enkel met Name & Address?
             try
             {
-                Client added = dc.AddClient(client);
+                Client toAdd = Mapper.RClientToClient(rclient);//JsonConvert.DeserializeObject<RClient>(rclient)
+                Client added = dc.AddClient(toAdd);
                 return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClient(added));
             }
             catch (Exception ex) 
             {
                 return NotFound(ex.Message);
             }
-
+        }
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] RClient rclient) 
+        {
+            try
+            {
+                if (rclient == null || rclient.ClientId != id.ToString()) //klopt niet want clientId = http:localhost...
+                    return BadRequest();
+                if (!dc.IsInClients(id))
+                {
+                    Client toAdd = Mapper.RClientToClient(rclient);
+                    Client added = dc.AddClient(toAdd);
+                    return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClient(added));
+                }
+                //RClient rclientDB = Mapper.ClientToRClient(dc.GetClient(id));
+                Client toUpdate = Mapper.RClientToClient(rclient);
+                toUpdate.Id = id;
+                dc.UpdateClient(toUpdate);
+                return new NoContentResult();
+            }
+            catch (Exception ex) 
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

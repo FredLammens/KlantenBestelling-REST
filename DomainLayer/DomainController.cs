@@ -123,5 +123,9 @@ namespace DomainLayer
             Order updatedOrder = uow.Orders.GetOrderWithoutId(order);
             return updatedOrder;
         }
+        public bool IsInClients(int id) 
+        {
+            return uow.Clients.IsInClients(id);
+        }
     }
 }

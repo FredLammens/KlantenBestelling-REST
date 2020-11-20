@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,19 +9,22 @@ namespace KlantenBestelling_REST.BaseClasses
     public class ROrder
     {
         private string _bestellingId;
-        public string bestellingId { get => _bestellingId; set => _bestellingId = klantId + "/Bestelling/" + value; }
-        public string product { get; set; }
-        public int aantal { get; set; }
-        public string klantId { get; set; }
-
-        public ROrder(string bestellingId, string product, int aantal, string klantId)
+        [JsonProperty("bestellingId")]
+        public string OrderId { get => _bestellingId; set => _bestellingId = ClientId + "/Bestelling/" + value; }
+        [JsonProperty("product")]
+        public string Product { get; set; }
+        [JsonProperty("aantal")]
+        public int Amount { get; set; }
+        [JsonProperty("klantId")]
+        public string ClientId { get; set; }
+        [JsonConstructor]
+        public ROrder(string orderId, string product, int amount, string clientId)
         {
-            this.product = product;
-            this.aantal = aantal;
-            this.klantId = klantId;
-            this.bestellingId = bestellingId;
+            OrderId = orderId;
+            Product = product;
+            Amount = amount;
+            ClientId = clientId;
         }
-
         public ROrder()
         {
 

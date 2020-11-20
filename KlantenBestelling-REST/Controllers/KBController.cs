@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DataLayer;
 using DomainLayer;
 using KlantenBestelling_REST.BaseClasses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace KlantenBestelling_REST.Controllers
 {
@@ -24,11 +18,11 @@ namespace KlantenBestelling_REST.Controllers
         //Get: api/Klant
         [HttpGet("{id}", Name = "Get")]
         [HttpHead("{id}")]
-        public ActionResult<RClient> Get(int id)
+        public ActionResult<RClientOut> Get(int id)
         {
             try
             {
-                return Mapper.ClientToRClient(dc.GetClient(id));
+                return Mapper.ClientToRClientOut(dc.GetClient(id));
             }
             catch (Exception ex) 
             {
@@ -36,14 +30,14 @@ namespace KlantenBestelling_REST.Controllers
             }
         }
         [HttpPost]
-        public ActionResult<RClient> Post([FromBody] RClient rclient) 
+        public ActionResult<RClientOut> Post([FromBody] RClientIn rClientIn) 
         {
             //Rclient werkt enkel met Name & Address?
             try
             {
-                Client toAdd = Mapper.RClientToClient(rclient);
+                Client toAdd = Mapper.RClientInToClient(rClientIn);
                 Client added = dc.AddClient(toAdd);
-                return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClient(added));
+                return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClientOut(added));
             }
             catch (Exception ex) 
             {
@@ -51,21 +45,19 @@ namespace KlantenBestelling_REST.Controllers
             }
         }
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] RClient rclient) 
+        public IActionResult Put(int id, [FromBody] RClientIn rClientIn) 
         {
             try
             {
-                if (rclient == null || rclient.ClientID != id) //klopt niet want clientId = http:localhost...
+                if (rClientIn == null || rClientIn.ClientID != id)
                     return BadRequest();
                 if (!dc.IsInClients(id))
                 {
-                    Client toAdd = Mapper.RClientToClient(rclient);
+                    Client toAdd = Mapper.RClientInToClient(rClientIn);
                     Client added = dc.AddClient(toAdd);
-                    return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClient(added));
+                    return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClientOut(added));
                 }
-                //RClient rclientDB = Mapper.ClientToRClient(dc.GetClient(id));
-                Client toUpdate = Mapper.RClientToClient(rclient);
-                toUpdate.Id = id;
+                Client toUpdate = Mapper.RClientInToClient(rClientIn);
                 dc.UpdateClient(toUpdate);
                 return new NoContentResult();
             }

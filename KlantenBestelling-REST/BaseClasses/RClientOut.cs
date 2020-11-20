@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace KlantenBestelling_REST.BaseClasses
 {
-    public class RClient
+    public class RClientOut
     {
         private int _clientId;
         [JsonIgnore]
@@ -27,7 +27,7 @@ namespace KlantenBestelling_REST.BaseClasses
         [JsonPropertyName("bestellingen")]
         public List<ROrder> Orders { get; set; } = new List<ROrder>();
 
-        public RClient(int clientID, string name, string address, List<ROrder> orders)
+        public RClientOut(int clientID, string name, string address, List<ROrder> orders)
         {
             ClientID = clientID;
             Name = name;
@@ -35,7 +35,7 @@ namespace KlantenBestelling_REST.BaseClasses
             Orders = orders;
         }
 
-        public RClient()
+        public RClientOut()
         {
 
         }

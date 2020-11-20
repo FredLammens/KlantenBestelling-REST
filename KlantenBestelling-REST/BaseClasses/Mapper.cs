@@ -1,16 +1,13 @@
 ﻿using DomainLayer;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KlantenBestelling_REST.BaseClasses
 {
     public class Mapper
     {
-        public static RClient ClientToRClient(Client client) 
+        public static RClientOut ClientToRClientOut(Client client) 
         {
-            return new RClient(client.Id, client.Name, client.Address, OrdersToROrders(client.GetOrders()));
+            return new RClientOut(client.Id, client.Name, client.Address, OrdersToROrders(client.GetOrders()));
         }
         public static List<ROrder> OrdersToROrders(IReadOnlyList<Order> orders) 
         {
@@ -25,9 +22,10 @@ namespace KlantenBestelling_REST.BaseClasses
         {
             return new ROrder(order.Id.ToString(), order.Product.ToString("f"), order.Amount, order.Client.Id.ToString());
         }
-        public static Client RClientToClient(RClient rclient)
+        public static Client RClientInToClient(RClientIn rClientIn) //
         {
-            Client client = new Client(rclient.Name, rclient.Address);
+            Client client = new Client(rClientIn.Name, rClientIn.Address);
+            client.Id = rClientIn.ClientID;
             return client;
         }
     }

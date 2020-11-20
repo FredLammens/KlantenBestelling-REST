@@ -41,7 +41,7 @@ namespace KlantenBestelling_REST.Controllers
             //Rclient werkt enkel met Name & Address?
             try
             {
-                Client toAdd = Mapper.RClientToClient(rclient);//JsonConvert.DeserializeObject<RClient>(rclient)
+                Client toAdd = Mapper.RClientToClient(rclient);
                 Client added = dc.AddClient(toAdd);
                 return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClient(added));
             }

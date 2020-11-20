@@ -6,7 +6,7 @@ using System.Text;
 
 namespace KlantenBestelling_REST.BaseClasses
 {
-    public class ROrder
+    public class ROrderOut
     {
         private string _bestellingId;
         [JsonProperty("bestellingId")]
@@ -18,14 +18,14 @@ namespace KlantenBestelling_REST.BaseClasses
         [JsonProperty("klantId")]
         public string ClientId { get; set; }
         [JsonConstructor]
-        public ROrder(string orderId, string product, int amount, string clientId)
+        public ROrderOut(string orderId, string product, int amount, string clientId)
         {
+            ClientId = clientId;
             OrderId = orderId;
             Product = product;
             Amount = amount;
-            ClientId = clientId;
         }
-        public ROrder()
+        public ROrderOut()
         {
 
         }

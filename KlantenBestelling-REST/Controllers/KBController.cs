@@ -15,6 +15,7 @@ namespace KlantenBestelling_REST.Controllers
         {
             this.dc = dc;
         }
+        #region ClientApi
         //Get: api/Klant
         [HttpGet("{id}")]
         [HttpHead("{id}")]
@@ -73,12 +74,43 @@ namespace KlantenBestelling_REST.Controllers
             try 
             {
                 dc.DeleteClient(id);
-                return Ok($"Client {id} removed");
+                return NoContent();
             }
             catch (Exception ex) 
             {
                 return NotFound(ex.Message);
             }
         }
+        #endregion
+        #region OrderApi
+        [HttpGet("{id}")]
+        [HttpHead("{id}")]
+        public ActionResult<RClientOut> GetOrder(int id)
+        {
+            try
+            {
+                return Mapper.ClientToRClientOut(dc.GetClient(id));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpPost]
+        public ActionResult<RClientOut> PostOrder([FromBody] RClientIn rClientIn)
+        {
+            //Rclient werkt enkel met Name & Address?
+            try
+            {
+                Client toAdd = Mapper.RClientInToClient(rClientIn);
+                Client added = dc.AddClient(toAdd);
+                return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.ClientToRClientOut(added));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        #endregion
     }
 }

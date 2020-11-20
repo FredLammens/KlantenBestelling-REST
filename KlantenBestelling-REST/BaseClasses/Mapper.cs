@@ -7,20 +7,20 @@ namespace KlantenBestelling_REST.BaseClasses
     {
         public static RClientOut ClientToRClientOut(Client client) 
         {
-            return new RClientOut(client.Id.ToString(), client.Name, client.Address, OrdersToROrders(client.GetOrders()));
+            return new RClientOut(client.Id.ToString(), client.Name, client.Address, OrdersToROrdersOut(client.GetOrders()));
         }
-        public static List<ROrder> OrdersToROrders(IReadOnlyList<Order> orders) 
+        public static List<ROrderOut> OrdersToROrdersOut(IReadOnlyList<Order> orders) 
         {
-            List<ROrder> rorders = new List<ROrder>();
+            List<ROrderOut> rorders = new List<ROrderOut>();
             foreach (var order in orders)
             {
                 rorders.Add(OrderToROrder(order));
             }
             return rorders;
         }
-        public static ROrder OrderToROrder(Order order) 
+        public static ROrderOut OrderToROrder(Order order) 
         {
-            return new ROrder(order.Id.ToString(), order.Product.ToString("f"), order.Amount, order.Client.Id.ToString());
+            return new ROrderOut(order.Id.ToString(), order.Product.ToString("f"), order.Amount, order.Client.Id.ToString());
         }
         public static Client RClientInToClient(RClientIn rClientIn) //
         {

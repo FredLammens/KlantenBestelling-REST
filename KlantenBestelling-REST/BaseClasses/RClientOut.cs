@@ -17,9 +17,9 @@ namespace KlantenBestelling_REST.BaseClasses
         [JsonPropertyName("adres")]
         public string Address { get; set; }
         [JsonPropertyName("bestellingen")]
-        public List<ROrder> Orders { get; set; } = new List<ROrder>();
+        public List<ROrderOut> Orders { get; set; } = new List<ROrderOut>();
 
-        public RClientOut(string clientIdString, string name, string address, List<ROrder> orders)
+        public RClientOut(string clientIdString, string name, string address, List<ROrderOut> orders)
         {
             ClientIdString = clientIdString;
             Name = name;

@@ -59,7 +59,8 @@ namespace KlantenBestelling_REST.Controllers
                 }
                 Client toUpdate = Mapper.RClientInToClient(rClientIn);
                 dc.UpdateClient(toUpdate);
-                return new NoContentResult();
+                RClientOut updatedClient = Mapper.ClientToRClientOut(dc.GetClient(toUpdate.Id));
+                return Ok(updatedClient);
             }
             catch (Exception ex) 
             {

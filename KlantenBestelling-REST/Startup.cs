@@ -28,8 +28,7 @@ namespace KlantenBestelling_REST
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddXmlDataContractSerializerFormatters();
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
-            services.AddSingleton<IDomainController, DomainController>();
+            services.AddSingleton<IDomainController>(new DomainController(new UnitOfWork(new KlantenBestellingenContext("MainDB"))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

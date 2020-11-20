@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataLayer;
 using DomainLayer;
 using KlantenBestelling_REST.BaseClasses;
 using Microsoft.AspNetCore.Http;

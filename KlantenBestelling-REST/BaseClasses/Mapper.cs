@@ -10,7 +10,7 @@ namespace KlantenBestelling_REST.BaseClasses
     {
         public static RClient ClientToRClient(Client client) 
         {
-            return new RClient(client.Id.ToString(), client.Name, client.Address, OrdersToROrders(client.GetOrders()));
+            return new RClient(client.Id, client.Name, client.Address, OrdersToROrders(client.GetOrders()));
         }
         public static List<ROrder> OrdersToROrders(IReadOnlyList<Order> orders) 
         {

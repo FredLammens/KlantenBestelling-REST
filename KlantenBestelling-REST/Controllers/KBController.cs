@@ -55,7 +55,7 @@ namespace KlantenBestelling_REST.Controllers
         {
             try
             {
-                if (rclient == null || rclient.ClientId != id.ToString()) //klopt niet want clientId = http:localhost...
+                if (rclient == null || rclient.ClientID != id) //klopt niet want clientId = http:localhost...
                     return BadRequest();
                 if (!dc.IsInClients(id))
                 {

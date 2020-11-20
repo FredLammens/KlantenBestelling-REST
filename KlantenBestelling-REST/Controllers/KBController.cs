@@ -16,9 +16,9 @@ namespace KlantenBestelling_REST.Controllers
             this.dc = dc;
         }
         //Get: api/Klant
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         [HttpHead("{id}")]
-        public ActionResult<RClientOut> Get(int id)
+        public ActionResult<RClientOut> GetClient(int id)
         {
             try
             {
@@ -30,14 +30,14 @@ namespace KlantenBestelling_REST.Controllers
             }
         }
         [HttpPost]
-        public ActionResult<RClientOut> Post([FromBody] RClientIn rClientIn) 
+        public ActionResult<RClientOut> PostClient([FromBody] RClientIn rClientIn) 
         {
             //Rclient werkt enkel met Name & Address?
             try
             {
                 Client toAdd = Mapper.RClientInToClient(rClientIn);
                 Client added = dc.AddClient(toAdd);
-                return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClientOut(added));
+                return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.ClientToRClientOut(added));
             }
             catch (Exception ex) 
             {
@@ -55,12 +55,25 @@ namespace KlantenBestelling_REST.Controllers
                 {
                     Client toAdd = Mapper.RClientInToClient(rClientIn);
                     Client added = dc.AddClient(toAdd);
-                    return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClientOut(added));
+                    return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.ClientToRClientOut(added));
                 }
                 Client toUpdate = Mapper.RClientInToClient(rClientIn);
                 dc.UpdateClient(toUpdate);
                 RClientOut updatedClient = Mapper.ClientToRClientOut(dc.GetClient(toUpdate.Id));
                 return Ok(updatedClient);
+            }
+            catch (Exception ex) 
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteClient(int id) 
+        {
+            try 
+            {
+                dc.DeleteClient(id);
+                return Ok($"Client {id} removed");
             }
             catch (Exception ex) 
             {

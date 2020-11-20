@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KlantenBestelling_REST.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Klant")]
     [ApiController]
     public class KBController : ControllerBase
     {
@@ -37,8 +37,16 @@ namespace KlantenBestelling_REST.Controllers
         [HttpPost]
         public ActionResult<RClient> Post([FromBody] Client client) 
         {
-            Client added = dc.AddClient(client);
-            return CreatedAtAction(nameof(Get),new { id = added.Id},Mapper.ClientToRClient(added));
+            try
+            {
+                Client added = dc.AddClient(client);
+                return CreatedAtAction(nameof(Get), new { id = added.Id }, Mapper.ClientToRClient(added));
+            }
+            catch (Exception ex) 
+            {
+                return NotFound(ex.Message);
+            }
+
         }
     }
 }

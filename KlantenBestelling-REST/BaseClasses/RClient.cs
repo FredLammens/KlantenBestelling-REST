@@ -8,7 +8,7 @@ namespace KlantenBestelling_REST.BaseClasses
     public class RClient
     {
         private string _klantId;
-        public string klantId { get => _klantId; set => _klantId = "http://localhost:50012/api/Klant/" + value; }
+        public string klantId { get => _klantId; set => _klantId = "http://localhost:50051/api/Klant/" + value; }
         public string naam { get; set; }
         public string adres { get; set; }
         public List<ROrder> bestellingen { get; set; } = new List<ROrder>();

@@ -24,7 +24,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpHead("{id}")]
         public ActionResult<RClientOut> GetClient(int id)
         {
-            logger.LogInformation(01,"GetClient Called");
+            logger.LogInformation(11,"GetClient Called");
             try
             {
                 return Mapper.ClientToRClientOut(dc.GetClient(id));
@@ -37,7 +37,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpPost]
         public ActionResult<RClientOut> PostClient([FromBody] RClientIn rClientIn) 
         {
-            logger.LogInformation(02, "PostClient Called");
+            logger.LogInformation(12, "PostClient Called");
             try
             {
                 Client toAdd = Mapper.RClientInToClient(rClientIn);
@@ -52,7 +52,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpPut("{id}")]
         public IActionResult PutClient(int id, [FromBody] RClientIn rClientIn) 
         {
-            logger.LogInformation(03, "PutClient Called");
+            logger.LogInformation(13, "PutClient Called");
             try
             {
                 if (rClientIn == null || rClientIn.ClientID != id)
@@ -76,7 +76,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteClient(int id) 
         {
-            logger.LogInformation(04, "DeleteClient Called");
+            logger.LogInformation(14, "DeleteClient Called");
             try 
             {
                 dc.DeleteClient(id);
@@ -93,7 +93,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpHead]
         public ActionResult<ROrderOut> GetOrder(int clientId, int orderId)
         {
-            logger.LogInformation(11, "GetOrder Called");
+            logger.LogInformation(21, "GetOrder Called");
             try
             {
                 return Mapper.OrderToROrderOut(dc.GetOrder(orderId));
@@ -106,7 +106,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpPost("{clientId}/Bestelling")]
         public ActionResult<ROrderOut> PostOrder(int clientId,[FromBody] ROrderIn rOrderIn)
         {
-            logger.LogInformation(12, "PostOrder Called");
+            logger.LogInformation(22, "PostOrder Called");
             try
             {
                 if (rOrderIn.ClientId != clientId)
@@ -125,7 +125,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpPut("{clientId}/Bestelling/{orderId}")]
         public IActionResult PutOrder(int clientId, int orderId, [FromBody] ROrderIn rOrderIn)
         {
-            logger.LogInformation(13, "PutOrder Called");
+            logger.LogInformation(23, "PutOrder Called");
             try
             {
                 if (rOrderIn == null || rOrderIn.ClientId != clientId || rOrderIn.OrderId != orderId)
@@ -153,7 +153,7 @@ namespace KlantenBestelling_REST.Controllers
         [HttpDelete("{clientId}/Bestelling/{orderId}")]
         public IActionResult DeleteOrder(int clientId, int orderId)
         {
-            logger.LogInformation(14, "DeleteOrder Called");
+            logger.LogInformation(24, "DeleteOrder Called");
             try
             {
                 dc.DeleteOrder(orderId);

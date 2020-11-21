@@ -13,5 +13,6 @@ namespace DomainLayer.IRepositories
         Order GetOrderWithoutId(Order order);
         void DeleteOrder(int id);
         bool IsInOrders(Order order);
+        bool IsInOrders(int id);
     }
 }

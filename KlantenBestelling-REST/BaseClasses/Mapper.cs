@@ -32,7 +32,9 @@ namespace KlantenBestelling_REST.BaseClasses
         public static Order ROrderInToOrder(ROrderIn rOrderIn, IDomainController dc) 
         {
             Product p = (Product)Enum.Parse(typeof(Product), rOrderIn.Product);
-            return new Order(p, rOrderIn.Amount, dc.GetClient(rOrderIn.ClientId));
+            Order order = new Order(p, rOrderIn.Amount, dc.GetClient(rOrderIn.ClientId));
+            order.Id = rOrderIn.OrderId;
+            return order;
         }
     }
 }

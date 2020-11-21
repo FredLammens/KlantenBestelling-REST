@@ -127,5 +127,9 @@ namespace DomainLayer
         {
             return uow.Clients.IsInClients(id);
         }
+        public bool IsInOrders(int id) 
+        {
+            return uow.Orders.IsInOrders(id);
+        }
     }
 }

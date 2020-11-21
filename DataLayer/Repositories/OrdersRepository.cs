@@ -85,6 +85,10 @@ namespace DataLayer.Repositories
             else
                 return false;
         }
+        public bool IsInOrders(int id) 
+        {
+            return context.Orders.Any(o => o.OrderId == id);
+        }
 
         /// <summary>
         /// Updates order from client derived with clientId from database

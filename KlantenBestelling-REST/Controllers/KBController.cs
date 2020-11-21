@@ -113,6 +113,33 @@ namespace KlantenBestelling_REST.Controllers
                 return NotFound(ex.Message);
             }
         }
-    #endregion
+        [HttpPut("{clientId}/Bestelling/{orderId}")]
+        public IActionResult PutOrder(int clientId, int orderId, [FromBody] ROrderIn rOrderIn)
+        {
+            try
+            {
+                if (rOrderIn == null || rOrderIn.ClientId != clientId || rOrderIn.OrderId != orderId)
+                    return BadRequest();
+                if (!dc.IsInOrders(orderId))
+                {
+                    if (rOrderIn.ClientId != clientId)
+                        return BadRequest("Input is invalid");
+                    if (!Enum.IsDefined(typeof(Product), rOrderIn.Product))
+                        return NotFound("product not found.");
+                    Order toAdd = Mapper.ROrderInToOrder(rOrderIn, dc);
+                    Order added = dc.AddOrder(toAdd, clientId);
+                    return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.OrderToROrderOut(added));
+                }
+                Order toUpdate = Mapper.ROrderInToOrder(rOrderIn,dc);
+                dc.UpdateOrder(toUpdate);
+                ROrderOut updatedOrder = Mapper.OrderToROrderOut(dc.GetOrder(toUpdate.Id));
+                return Ok(updatedOrder);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        #endregion
     }
 }

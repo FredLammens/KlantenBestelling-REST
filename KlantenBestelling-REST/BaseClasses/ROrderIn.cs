@@ -9,6 +9,8 @@ namespace KlantenBestelling_REST.BaseClasses
 {
     public class ROrderIn
     {
+        [JsonPropertyName("bestellingId")]
+        public int OrderId { get; set; }
         [JsonPropertyName("klantId")]
         public int ClientId { get; set; }
         [JsonPropertyName("product")]

@@ -15,5 +15,6 @@ namespace DomainLayer
         Order GetOrder(int id);
         Order UpdateOrder(Order order);
         bool IsInClients(int id);
+        bool IsInOrders(int id);
     }
 }

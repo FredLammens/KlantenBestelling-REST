@@ -5,6 +5,7 @@ using Xunit;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using KlantenBestelling_REST.BaseClasses;
+using Microsoft.Extensions.Logging;
 
 namespace RESTLayerTests
 {
@@ -16,7 +17,7 @@ namespace RESTLayerTests
         public ControllerTest()
         {
             mockRepo = new Mock<IDomainController>();
-            kbController = new KBController(mockRepo.Object);
+            kbController = new KBController(mockRepo.Object, new LoggerFactory());
         }
         [Fact]
         public void GETClient_UnknownID_ReturnsNotFound()
@@ -53,6 +54,9 @@ namespace RESTLayerTests
         public void POSTClient_ValidObject_ReturnsCreatedAtAction()
         {
             RClientIn client = new RClientIn("trala", "simpsonlaan 12");
+            Client clientRepo = new Client(client.Name, client.Address);
+            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
+            //Client added = dc.AddClient(toAdd);
             var response = kbController.PostClient(client);
             Assert.IsType<CreatedAtActionResult>(response.Result);
         }
@@ -61,6 +65,9 @@ namespace RESTLayerTests
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             c.ClientID = 2;
+            Client clientRepo = new Client(c.Name, c.Address);
+            clientRepo.Id = 2;
+            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
             var tussenResponse = kbController.PostClient(c);
             var response = tussenResponse.Result as CreatedAtActionResult;
             var item = response.Value as RClientOut;

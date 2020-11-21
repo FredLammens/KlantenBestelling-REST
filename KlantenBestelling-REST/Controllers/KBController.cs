@@ -50,7 +50,7 @@ namespace KlantenBestelling_REST.Controllers
             }
         }
         [HttpPut("{id}")]
-        public IActionResult PutClient(int id, [FromBody] RClientIn rClientIn) 
+        public ActionResult<RClientOut> PutClient(int id, [FromBody] RClientIn rClientIn) 
         {
             logger.LogInformation(13, "PutClient Called");
             try

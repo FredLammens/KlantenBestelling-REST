@@ -77,13 +77,72 @@ namespace RESTLayerTests
             Assert.Equal(c.Address, item.Address);
         }
         [Fact]
-        public void POSTClient_InValidObject_ReturnsBadRequest()
+        public void POSTClient_InValidObject_ReturnsNotFound()
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             kbController.ModelState.AddModelError("format error", "int expected");
             var response = kbController.PostClient(c).Result;
-
             Assert.IsType<NotFoundObjectResult>(response);
         }
+        [Fact]
+        public void PUTClient_InValidObject_ReturnsBadRequest() 
+        {
+            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
+            c.ClientID = 5;
+            var response = kbController.PutClient(2, c);
+            Assert.IsType<BadRequestResult>(response.Result);
+        }
+        [Fact]
+        public void PUTClient_InValidObject_ReturnsNotFound() 
+        {
+            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
+            c.ClientID = 2;
+            kbController.ModelState.AddModelError("simulated exception", "duno client already in db");
+            var response = kbController.PutClient(2,c).Result;
+            Assert.IsType<NotFoundObjectResult>(response);
+        }
+        [Fact]
+        public void PUTClient_InValidId_ReturnsNotFound()
+        {
+            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
+            c.ClientID = 2;
+            Client clientRepo = new Client(c.Name, c.Address);
+            clientRepo.Id = 2;
+            mockRepo.Setup(repo => repo.UpdateClient(clientRepo)).Throws(new Exception("Client not in DB."));
+            var response = kbController.PutClient(2, c).Result;
+            Assert.IsType<NotFoundObjectResult>(response);
+        }
+        [Fact]
+        public void PUTClient_ValidObject_ReturnsCorrectItem() 
+        {
+            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
+            c.ClientID = 2;
+            Client clientRepo = new Client(c.Name, c.Address);
+            clientRepo.Id = 2;
+            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
+            var tussenResponse = kbController.PutClient(2,c);
+            var response = tussenResponse.Result as CreatedAtActionResult;
+            var item = response.Value as RClientOut;
+            Assert.IsType<RClientOut>(item);
+            Assert.Equal(Constants.URI + 2, item.ClientIdString);
+            Assert.Equal(c.Name, item.Name);
+            Assert.Equal(c.Address, item.Address);
+        }
+        [Fact]
+        public void DeleteClient_ValidObject_ReturnsNoContent() 
+        {
+            var result = kbController.DeleteClient(1);
+            Assert.IsType<NoContentResult>(result);
+
+        }
+        [Fact]
+        public void DeleteClient_InValidObject_ReturnsNotFound() 
+        {
+            kbController.ModelState.AddModelError("simulated exception", "duno client not in db");
+            var result = kbController.DeleteClient(1);
+            Assert.IsType<NoContentResult>(result);
+        }
+
+
     }
 }

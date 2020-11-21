@@ -71,7 +71,7 @@ namespace DomainLayer
         /// <param name="order"></param>
         /// <param name="clientID"></param>
         /// <returns></returns>
-        public Order AddOrder(Order order,int clientId)//? hoe door domein checks van client
+        public Order AddOrder(Order order,int clientId)
         {
             Order updatedOrder;
             //al in databank => amounts op tellen en updaten

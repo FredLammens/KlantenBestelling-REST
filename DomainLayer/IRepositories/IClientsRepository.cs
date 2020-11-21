@@ -11,6 +11,7 @@ namespace DomainLayer.IRepositories
         Client GetClient(int id);
         Client GetClient(string Name, string Address);
         void DeleteClient(int id);
+        bool HasOrders(int id);
         bool IsInClients(int id);
     }
 }

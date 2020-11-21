@@ -33,18 +33,27 @@ namespace DataLayer.Repositories
         }
         /// <summary>
         /// Deletes client from database with id given.
-        /// if in database and if client doesnt have any orders.
+        /// if in database and has no orders
         /// </summary>
         /// <param name="id">id from client to delete</param>
         public void DeleteClient(int id)
         {
-                //kijk of het erinzit
-                if (!context.Clients.Any(c => c.ClientId == id))
+            //met bestellingen => foutmelding 
+            if (HasOrders(id))
+                throw new Exception("Client has orders.");
+            //kijk of het erinzit
+            if (!context.Clients.Any(c => c.ClientId == id))
                     throw new Exception("Client not in database.");
-                //met bestellingen => foutmelding 
-                if (context.Orders.Any(o => o.Client.ClientId == id))
-                    throw new Exception("Client has orders.");
                 context.Clients.Remove(context.Clients.Single(c => c.ClientId  == id));
+        }
+        /// <summary>
+        /// Checks if client has orders
+        /// </summary>
+        /// <param name="id">clientId</param>
+        /// <returns></returns>
+        public bool HasOrders(int id) 
+        {
+            return context.Orders.Any(o => o.Client.ClientId == id);
         }
         /// <summary>
         /// Gets client with all orders from database with id given.

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainLayer", "DomainLayer\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{3F908F77-1682-4D89-B9E3-810C30A98C30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{659F60DA-5986-49E7-9118-075C9EEDA4C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{659F60DA-5986-49E7-9118-075C9EEDA4C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTLayerTests", "RESTLayerTests\RESTLayerTests.csproj", "{C32130AE-E893-4480-9B65-21093C13497B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{659F60DA-5986-49E7-9118-075C9EEDA4C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{659F60DA-5986-49E7-9118-075C9EEDA4C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{659F60DA-5986-49E7-9118-075C9EEDA4C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C32130AE-E893-4480-9B65-21093C13497B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C32130AE-E893-4480-9B65-21093C13497B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C32130AE-E893-4480-9B65-21093C13497B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C32130AE-E893-4480-9B65-21093C13497B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

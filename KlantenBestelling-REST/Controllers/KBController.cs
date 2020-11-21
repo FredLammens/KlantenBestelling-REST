@@ -23,7 +23,7 @@ namespace KlantenBestelling_REST.Controllers
         {
             try
             {
-                return Ok(Mapper.ClientToRClientOut(dc.GetClient(id)));
+                return Mapper.ClientToRClientOut(dc.GetClient(id));
             }
             catch (Exception ex) 
             {

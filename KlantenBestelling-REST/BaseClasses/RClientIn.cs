@@ -21,6 +21,13 @@ namespace KlantenBestelling_REST.BaseClasses
             Name = name;
             Address = address;
         }
+
+        public RClientIn(string name, string address)
+        {
+            Name = name;
+            Address = address;
+        }
+
         public RClientIn()
         {
 

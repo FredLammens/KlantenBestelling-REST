@@ -140,6 +140,19 @@ namespace KlantenBestelling_REST.Controllers
                 return NotFound(ex.Message);
             }
         }
+        [HttpDelete("{clientId}/Bestelling/{orderId}")]
+        public IActionResult DeleteOrder(int clientId, int orderId)
+        {
+            try
+            {
+                dc.DeleteOrder(orderId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
         #endregion
     }
 }

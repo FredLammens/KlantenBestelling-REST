@@ -11,7 +11,7 @@ namespace KlantenBestelling_REST.BaseClasses
     {
         private string _clientIdString;
         [JsonPropertyName("klantId")]
-        public string ClientIdString { get => _clientIdString; set => _clientIdString = "http://localhost:50051/api/Klant/" + value;}
+        public string ClientIdString { get => _clientIdString; set => _clientIdString = Constants.URI + value;}
         [JsonPropertyName("naam")]
         public string Name { get; set; }
         [JsonPropertyName("adres")]

@@ -17,7 +17,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             Client gettedClient = null;
             //
             Action act = () => gettedClient = dc.AddClient(client);
@@ -32,7 +32,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             Client gettedClient = dc.AddClient(client); ;
             //
             Action act = () => dc.DeleteClient(gettedClient.Id);
@@ -46,7 +46,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = null;
@@ -61,7 +61,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = dc.GetClient(1);
@@ -77,7 +77,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = dc.GetClient(1);
@@ -94,7 +94,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = dc.GetClient(1);
@@ -109,7 +109,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = dc.GetClient(1);
@@ -126,7 +126,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = dc.GetClient(1);
@@ -145,7 +145,7 @@ namespace UnitTests.DomainLayerTests
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             dc.AddClient(client);
             //
             Client gettedClient = dc.GetClient(1);
@@ -165,8 +165,8 @@ namespace UnitTests.DomainLayerTests
             DomainController dc = new DomainController(uow);
             Action act = () =>
             {
-                Client client = new Client("TestName", "Test");
-                Client client2 = new Client("Test2", "TTTT");
+                Client client = new Client("TestName", "Test5678910");
+                Client client2 = new Client("Test2", "Tralalalalallalalal");
                 dc.AddClient(client);
                 dc.AddClient(client2);
                 Client gettedClient = dc.GetClient(2);

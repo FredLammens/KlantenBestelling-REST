@@ -13,7 +13,7 @@ namespace UnitTests
         public void AddClientNormalNoExceptionsTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             Action act = () => uow.Clients.AddClient(client);
             act.ShouldNotThrow();
         }
@@ -21,7 +21,7 @@ namespace UnitTests
         public void AddClientCorrectIDReturnedTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Client returnedClient = uow.Clients.GetClient(client.Name, client.Address);
@@ -31,7 +31,7 @@ namespace UnitTests
         public void AddSameClientTwiceTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Action act = () => uow.Clients.AddClient(client);
@@ -41,7 +41,7 @@ namespace UnitTests
         public void GetClientWithIdNormalNoExceptions()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Client returned = uow.Clients.GetClient(1);
@@ -53,7 +53,7 @@ namespace UnitTests
         public void GetClientWithNameAndAddressNormalNoExceptions()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Client returned = uow.Clients.GetClient(client.Name,client.Address);
@@ -72,7 +72,7 @@ namespace UnitTests
         public void GetClientWithOrders() 
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Client returned = uow.Clients.GetClient(1);
@@ -87,7 +87,7 @@ namespace UnitTests
         public void UpdateClientNormalNoExceptionsTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Client returned = uow.Clients.GetClient(1);
@@ -102,7 +102,7 @@ namespace UnitTests
         public void UpdateClientNotInDatabaseTest() 
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test1234567");
             Action act = () => uow.Clients.UpdateClient(client);
             act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database");
         }
@@ -110,7 +110,7 @@ namespace UnitTests
         public void DeleteClientNormalNoExceptions() 
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            uow.Clients.AddClient(new Client("TestName", "Test"));
+            uow.Clients.AddClient(new Client("TestName", "Test1234567"));
             uow.Complete();
             Action act = () => uow.Clients.DeleteClient(1);
             act.ShouldNotThrow();
@@ -127,7 +127,7 @@ namespace UnitTests
         public void DeleteClientWithOrdersReturnException() 
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            uow.Clients.AddClient(new Client("TestName", "Test"));
+            uow.Clients.AddClient(new Client("TestName", "Test1234567"));
             uow.Complete();
             Client returned = uow.Clients.GetClient(1);
             uow.Orders.AddOrder(new Order(Product.Duvel, 10, returned), returned.Id);

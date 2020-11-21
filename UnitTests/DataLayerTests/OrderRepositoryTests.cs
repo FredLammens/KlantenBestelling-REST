@@ -16,7 +16,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             uow.Complete();
             //
@@ -38,7 +38,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             uow.Complete();
             //
@@ -52,7 +52,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             uow.Complete();
             //
@@ -72,7 +72,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             //
             Action act = () => uow.Orders.GetOrder(1);
@@ -84,7 +84,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             uow.Complete();
             //
@@ -106,7 +106,7 @@ namespace UnitTests.DataLayerTests
 
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             uow.Complete();
             //
@@ -119,7 +119,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             uow.Complete();
             //
@@ -138,7 +138,7 @@ namespace UnitTests.DataLayerTests
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
-            Client client = new Client("TestName", "Test");
+            Client client = new Client("TestName", "Test5678910");
             uow.Clients.AddClient(client);
             //
             Action act = () => uow.Orders.DeleteOrder(1);

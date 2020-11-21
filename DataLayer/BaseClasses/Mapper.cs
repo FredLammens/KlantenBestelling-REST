@@ -47,7 +47,9 @@ namespace DataLayer.BaseClasses
             client.Id = dclient.ClientId;
             foreach (DOrder dOrder in dclient.Orders)
             {
-                client.AddOrder(new Order(dOrder.Product,dOrder.Amount,client));
+                Order toAdd = new Order(dOrder.Product, dOrder.Amount, client);
+                toAdd.Id = dOrder.OrderId;
+                client.AddOrder(toAdd);
             }          
             return client;
         }

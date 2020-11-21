@@ -33,7 +33,6 @@ namespace KlantenBestelling_REST.Controllers
         [HttpPost]
         public ActionResult<RClientOut> PostClient([FromBody] RClientIn rClientIn) 
         {
-            //Rclient werkt enkel met Name & Address?
             try
             {
                 Client toAdd = Mapper.RClientInToClient(rClientIn);
@@ -83,34 +82,37 @@ namespace KlantenBestelling_REST.Controllers
         }
         #endregion
         #region OrderApi
-        [HttpGet("{id}")]
-        [HttpHead("{id}")]
-        public ActionResult<RClientOut> GetOrder(int id)
+        [HttpGet("{clientId}/Bestelling/{orderId}")]
+        [HttpHead]
+        public ActionResult<ROrderOut> GetOrder(int clientId, int orderId)
         {
             try
             {
-                return Mapper.ClientToRClientOut(dc.GetClient(id));
+                return Mapper.OrderToROrderOut(dc.GetOrder(orderId));
             }
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
         }
-        [HttpPost]
-        public ActionResult<RClientOut> PostOrder([FromBody] RClientIn rClientIn)
+        [HttpPost("{clientId}/Bestelling")]
+        public ActionResult<ROrderOut> PostOrder(int clientId,[FromBody] ROrderIn rOrderIn)
         {
-            //Rclient werkt enkel met Name & Address?
             try
             {
-                Client toAdd = Mapper.RClientInToClient(rClientIn);
-                Client added = dc.AddClient(toAdd);
-                return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.ClientToRClientOut(added));
+                if (rOrderIn.ClientId != clientId)
+                    return BadRequest("Input is invalid");
+                if (!Enum.IsDefined(typeof(Product), rOrderIn.Product))
+                    return NotFound("product not found.");
+                Order toAdd = Mapper.ROrderInToOrder(rOrderIn, dc);
+                Order added = dc.AddOrder(toAdd,clientId);
+                return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.OrderToROrderOut(added));
             }
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
         }
-        #endregion
+    #endregion
     }
 }

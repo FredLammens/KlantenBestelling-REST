@@ -1,4 +1,5 @@
 ﻿using DomainLayer;
+using System;
 using System.Collections.Generic;
 
 namespace KlantenBestelling_REST.BaseClasses
@@ -9,16 +10,16 @@ namespace KlantenBestelling_REST.BaseClasses
         {
             return new RClientOut(client.Id.ToString(), client.Name, client.Address, OrdersToROrdersOut(client.GetOrders()));
         }
-        public static List<ROrderOut> OrdersToROrdersOut(IReadOnlyList<Order> orders) 
+        private static List<ROrderOut> OrdersToROrdersOut(IReadOnlyList<Order> orders) //iet smis met bestelling id => altijd 0
         {
             List<ROrderOut> rorders = new List<ROrderOut>();
             foreach (var order in orders)
             {
-                rorders.Add(OrderToROrder(order));
+                rorders.Add(OrderToROrderOut(order));
             }
             return rorders;
         }
-        public static ROrderOut OrderToROrder(Order order) 
+        public static ROrderOut OrderToROrderOut(Order order) 
         {
             return new ROrderOut(order.Id.ToString(), order.Product.ToString("f"), order.Amount, order.Client.Id.ToString());
         }
@@ -27,6 +28,11 @@ namespace KlantenBestelling_REST.BaseClasses
             Client client = new Client(rClientIn.Name, rClientIn.Address);
             client.Id = rClientIn.ClientID;
             return client;
+        }
+        public static Order ROrderInToOrder(ROrderIn rOrderIn, IDomainController dc) 
+        {
+            Product p = (Product)Enum.Parse(typeof(Product), rOrderIn.Product);
+            return new Order(p, rOrderIn.Amount, dc.GetClient(rOrderIn.ClientId));
         }
     }
 }

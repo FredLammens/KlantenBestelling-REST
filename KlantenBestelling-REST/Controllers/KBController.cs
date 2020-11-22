@@ -96,7 +96,7 @@ namespace KlantenBestelling_REST.Controllers
             logger.LogInformation(21, "GetOrder Called");
             try
             {
-                return Mapper.OrderToROrderOut(dc.GetOrder(orderId));
+                return Ok(Mapper.OrderToROrderOut(dc.GetOrder(orderId)));
             }
             catch (Exception ex)
             {

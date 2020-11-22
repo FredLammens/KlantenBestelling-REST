@@ -2,8 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests.DomainLayerTests
 {
@@ -11,14 +9,14 @@ namespace UnitTests.DomainLayerTests
     public class ClientTests
     {
         [TestMethod]
-        public void ClientWithNullNameTest() 
+        public void ClientWithNullNameTest()
         {
             Client client = new Client("test", "tralalalala");
             Action act = () => client.Name = "";
             act.ShouldThrow<ArgumentException>().Message.ShouldBe("Name can't be null or empty.");
         }
         [TestMethod]
-        public void ClientWithAdressSmallerThanTenTest() 
+        public void ClientWithAdressSmallerThanTenTest()
         {
             Client client = new Client("test", "tralalalala");
             Action act = () => client.Address = "abcd";
@@ -27,15 +25,15 @@ namespace UnitTests.DomainLayerTests
             act.ShouldThrow<ArgumentException>().Message.ShouldBe("Adress must be bigger or equal to 10 characters");
         }
         [TestMethod]
-        public void ClientsOrdersCheckClientTest() 
+        public void ClientsOrdersCheckClientTest()
         {
             Client client = new Client("test", "tralalalala");
             Client clientTest = new Client("TestJ", "TestAdresje");
-            Action act = () => client.AddOrder(new Order(Product.Westmalle,10,clientTest));
+            Action act = () => client.AddOrder(new Order(Product.Westmalle, 10, clientTest));
             act.ShouldThrow<ArgumentException>().Message.ShouldBe("client is not the same.");
         }
         [TestMethod]
-        public void ClientsOrdersDuplicateAddAmountTest() 
+        public void ClientsOrdersDuplicateAddAmountTest()
         {
             Client client = new Client("test", "tralalalala");
             client.AddOrder(new Order(Product.Westmalle, 10, client));
@@ -43,14 +41,14 @@ namespace UnitTests.DomainLayerTests
             client.GetOrders()[0].Amount.ShouldBe(15);
         }
         [TestMethod]
-        public void GetOrdersTest() 
+        public void GetOrdersTest()
         {
             Client client = new Client("test", "tralalalala");
             client.AddOrder(new Order(Product.Westmalle, 10, client));
             client.GetOrders().Count.ShouldBe(1);
         }
         [TestMethod]
-        public void RemoveOrderTest() 
+        public void RemoveOrderTest()
         {
             Client client = new Client("test", "tralalalala");
             Order order = new Order(Product.Westmalle, 10, client);

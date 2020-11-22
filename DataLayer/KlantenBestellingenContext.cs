@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 
 namespace DataLayer
 {
@@ -35,12 +34,12 @@ namespace DataLayer
         /// Sets the connectionstring derived from the appsettings.jsonfile
         /// </summary>
         /// <param name="db">what Database to use connectionstring from </param>
-        private void SetConnectionString(string db = "MainDB") 
+        private void SetConnectionString(string db = "MainDB")
         {
             var builder = new ConfigurationBuilder();
             builder.AddJsonFile("appsettings.json", optional: false);
             var configuration = builder.Build();
-            switch (db) 
+            switch (db)
             {
                 case "MainDB":
                     connectionString = configuration.GetConnectionString("KlantenBestellingenConnection").ToString();

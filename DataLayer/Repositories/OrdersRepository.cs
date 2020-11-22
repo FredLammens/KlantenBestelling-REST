@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataLayer.Repositories
 {
@@ -16,11 +15,7 @@ namespace DataLayer.Repositories
         {
             this.context = context;
         }
-        /// <summary>
-        /// Adds order to database
-        /// </summary>
-        /// <param name="order">order to add</param>
-        /// <returns></returns>
+        
         public void AddOrder(Order order, int clientId)
         {
             if (clientId <= 0)
@@ -30,17 +25,14 @@ namespace DataLayer.Repositories
             dOrder.Client_Id = clientId;
             context.Orders.Add(dOrder);
         }
-        public void AddOrders(IReadOnlyList<Order> orders) 
+        public void AddOrders(IReadOnlyList<Order> orders)
         {
             foreach (Order order in orders)
             {
-                AddOrder(order,order.Client.Id);
+                AddOrder(order, order.Client.Id);
             }
         }
-        /// <summary>
-        /// Deletes order from  database
-        /// </summary>
-        /// <param name="id">id from order to delete</param>
+       
         public void DeleteOrder(int id)
         {
             //check of order erin zit
@@ -48,11 +40,7 @@ namespace DataLayer.Repositories
                 throw new Exception("Order not in database.");
             context.Orders.Remove(context.Orders.Single(o => o.OrderId == id));
         }
-        /// <summary>
-        /// Gets order from database
-        /// </summary>
-        /// <param name="id">id from order to get</param>
-        /// <returns></returns>
+      
         public Order GetOrder(int id)
         {
             //kijk of het erinzit
@@ -85,17 +73,12 @@ namespace DataLayer.Repositories
             else
                 return false;
         }
-        public bool IsInOrders(int id) 
+        public bool IsInOrders(int id)
         {
             return context.Orders.Any(o => o.OrderId == id);
         }
 
-        /// <summary>
-        /// Updates order from client derived with clientId from database
-        /// </summary>
-        /// <param name="order">order to update</param>
-        /// <param name="clientId">clientId for link</param>
-        /// <returns></returns>
+       
         public void UpdateOrder(Order order)
         {
             //kijk of het erinzit

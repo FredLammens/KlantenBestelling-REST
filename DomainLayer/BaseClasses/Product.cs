@@ -1,12 +1,13 @@
-﻿using System;
-
-namespace DomainLayer
+﻿namespace DomainLayer
 {
-        public enum Product 
-        {
-            Leffe,
-            Westmalle,
-            Orval,
-            Duvel
-        }
+    /// <summary>
+    /// enumeration of all products
+    /// </summary>
+    public enum Product
+    {
+        Leffe,
+        Westmalle,
+        Orval,
+        Duvel
+    }
 }

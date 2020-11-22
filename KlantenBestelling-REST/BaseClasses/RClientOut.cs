@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace KlantenBestelling_REST.BaseClasses
@@ -11,7 +7,7 @@ namespace KlantenBestelling_REST.BaseClasses
     {
         private string _clientIdString;
         [JsonPropertyName("klantId")]
-        public string ClientIdString { get => _clientIdString; set => _clientIdString = Constants.URI + value;}
+        public string ClientIdString { get => _clientIdString; set => _clientIdString = Constants.URI + value; }
         [JsonPropertyName("naam")]
         public string Name { get; set; }
         [JsonPropertyName("adres")]

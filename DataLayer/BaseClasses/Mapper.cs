@@ -1,7 +1,4 @@
 ﻿using DomainLayer;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataLayer.BaseClasses
 {
@@ -50,7 +47,7 @@ namespace DataLayer.BaseClasses
                 Order toAdd = new Order(dOrder.Product, dOrder.Amount, client);
                 toAdd.Id = dOrder.OrderId;
                 client.AddOrder(toAdd);
-            }          
+            }
             return client;
         }
 

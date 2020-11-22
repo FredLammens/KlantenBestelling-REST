@@ -3,8 +3,6 @@ using DomainLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests.DomainLayerTests
 {
@@ -12,7 +10,7 @@ namespace UnitTests.DomainLayerTests
     public class DomainControllerTests
     {
         [TestMethod]
-        public void AddClientNormalNoExceptionsTest() 
+        public void AddClientNormalNoExceptionsTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -27,7 +25,7 @@ namespace UnitTests.DomainLayerTests
 
         }
         [TestMethod]
-        public void DeleteClientNormalNoExceptionTest() 
+        public void DeleteClientNormalNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -41,7 +39,7 @@ namespace UnitTests.DomainLayerTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database");
         }
         [TestMethod]
-        public void GetClientNoExceptionTest() 
+        public void GetClientNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -56,7 +54,7 @@ namespace UnitTests.DomainLayerTests
             gettedClient.Address.ShouldBe(client.Address);
         }
         [TestMethod]
-        public void UpdateClientNoExceptionTest() 
+        public void UpdateClientNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -89,7 +87,7 @@ namespace UnitTests.DomainLayerTests
             changedOrder.Amount.ShouldBe(20);
         }
         [TestMethod]
-        public void AddOrderNoExceptionTest() 
+        public void AddOrderNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -104,7 +102,7 @@ namespace UnitTests.DomainLayerTests
         }
 
         [TestMethod]
-        public void DeleteOrderNoExceptionTest() 
+        public void DeleteOrderNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -121,7 +119,7 @@ namespace UnitTests.DomainLayerTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
         [TestMethod]
-        public void GetOrderNoExceptionTest() 
+        public void GetOrderNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -140,7 +138,7 @@ namespace UnitTests.DomainLayerTests
             gettedOrder.Client.ShouldBe(order.Client);
         }
         [TestMethod]
-        public void UpdateOrderNoExceptionTest() 
+        public void UpdateOrderNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -159,7 +157,7 @@ namespace UnitTests.DomainLayerTests
             updatedOrder.Product.ShouldBe(Product.Westmalle);
         }
         [TestMethod]
-        public void IntegratieTest() 
+        public void IntegratieTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             DomainController dc = new DomainController(uow);

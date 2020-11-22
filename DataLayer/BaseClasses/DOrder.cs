@@ -1,9 +1,6 @@
 ﻿using DomainLayer;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace DataLayer
 {
@@ -41,7 +38,7 @@ namespace DataLayer
         /// <param name="amount">amount</param>
         /// <param name="client">client</param>
 
-        public DOrder(Product product, int amount,DClient client)
+        public DOrder(Product product, int amount, DClient client)
         {
             Product = product;
             Amount = amount;
@@ -51,7 +48,7 @@ namespace DataLayer
         /// Constructor for EFCore 
         /// </summary>
         /// <param name="amount"></param>
-        public DOrder(int amount) 
+        public DOrder(int amount)
         {
             Amount = amount;
         }

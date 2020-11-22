@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DomainLayer
 {
     public class Client
     {
+        /// <summary>
+        /// client id
+        /// </summary>
         public int Id { get; set; }
         private string _name;
         /// <summary>
@@ -15,16 +17,23 @@ namespace DomainLayer
         public string Name { get => _name; set { if (string.IsNullOrEmpty(value)) { throw new ArgumentException("Name can't be null or empty."); } _name = value; } }
         private string _address;
         /// <summary>
-        /// Checks if address is smaller than or equal to 10 characters and is not empty 
+        /// Checks if address is smaller than or equal to 10 characters and is not empty before setting
         /// </summary>
         public string Address { get => _address; set { if (value.Length <= 10) throw new ArgumentException("Adress must be bigger or equal to 10 characters"); if (string.IsNullOrEmpty(value)) throw new Exception("Address can't be null"); _address = value; } }
         private HashSet<Order> orders = new HashSet<Order>();
-
+        /// <summary>
+        /// Constructor for Domain/PresentationLayer
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <param name="address">address</param>
         public Client(string name, string address)
         {
             Name = name;
             Address = address;
         }
+        /// <summary>
+        /// Empty Constructor
+        /// </summary>
         public Client()
         {
 
@@ -58,7 +67,11 @@ namespace DomainLayer
         {
             return orders.ToList().AsReadOnly();
         }
-        public void RemoveOrder(Order order) 
+        /// <summary>
+        /// Removes order
+        /// </summary>
+        /// <param name="order">order to remove</param>
+        public void RemoveOrder(Order order)
         {
             if (orders.Contains(order))
                 orders.Remove(order);

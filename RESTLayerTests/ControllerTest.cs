@@ -1,11 +1,11 @@
-using KlantenBestelling_REST.Controllers;
 using DomainLayer;
-using Moq;
-using Xunit;
-using System;
-using Microsoft.AspNetCore.Mvc;
 using KlantenBestelling_REST.BaseClasses;
+using KlantenBestelling_REST.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using Xunit;
 
 namespace RESTLayerTests
 {
@@ -46,7 +46,7 @@ namespace RESTLayerTests
             var result = kbController.GetClient(2).Result as OkObjectResult;
 
             Assert.IsType<RClientOut>(result.Value);
-            Assert.Equal(Constants.URI+2, (result.Value as RClientOut).ClientIdString);
+            Assert.Equal(Constants.URI + 2, (result.Value as RClientOut).ClientIdString);
             Assert.Equal(c.Name, (result.Value as RClientOut).Name);
             Assert.Equal(c.Address, (result.Value as RClientOut).Address);
             Assert.Equal(c.GetOrders().Count, (result.Value as RClientOut).Orders.Count);
@@ -56,7 +56,7 @@ namespace RESTLayerTests
         {
             RClientIn client = new RClientIn("trala", "simpsonlaan 12");
             Client clientRepo = new Client(client.Name, client.Address);
-            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);;
+            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo); ;
             var response = kbController.PostClient(client);
             Assert.IsType<CreatedAtActionResult>(response.Result);
         }
@@ -85,7 +85,7 @@ namespace RESTLayerTests
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
-        public void PUTClient_InValidObject_ReturnsBadRequest() 
+        public void PUTClient_InValidObject_ReturnsBadRequest()
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             c.ClientID = 5;
@@ -93,12 +93,12 @@ namespace RESTLayerTests
             Assert.IsType<BadRequestResult>(response.Result);
         }
         [Fact]
-        public void PUTClient_InValidObject_ReturnsNotFound() 
+        public void PUTClient_InValidObject_ReturnsNotFound()
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             c.ClientID = 2;
             kbController.ModelState.AddModelError("simulated exception", "duno client already in db");
-            var response = kbController.PutClient(2,c).Result;
+            var response = kbController.PutClient(2, c).Result;
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
@@ -113,14 +113,14 @@ namespace RESTLayerTests
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
-        public void PUTClient_ValidObject_ReturnsCorrectItem() 
+        public void PUTClient_ValidObject_ReturnsCorrectItem()
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             c.ClientID = 2;
             Client clientRepo = new Client(c.Name, c.Address);
             clientRepo.Id = 2;
             mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
-            var tussenResponse = kbController.PutClient(2,c);
+            var tussenResponse = kbController.PutClient(2, c);
             var response = tussenResponse.Result as CreatedAtActionResult;
             var item = response.Value as RClientOut;
             Assert.IsType<RClientOut>(item);
@@ -129,14 +129,14 @@ namespace RESTLayerTests
             Assert.Equal(c.Address, item.Address);
         }
         [Fact]
-        public void DeleteClient_ValidObject_ReturnsNoContent() 
+        public void DeleteClient_ValidObject_ReturnsNoContent()
         {
             var result = kbController.DeleteClient(1);
             Assert.IsType<NoContentResult>(result);
 
         }
         [Fact]
-        public void DeleteClient_InValidObject_ReturnsNotFound() 
+        public void DeleteClient_InValidObject_ReturnsNotFound()
         {
             kbController.ModelState.AddModelError("simulated exception", "duno client not in db");
             var result = kbController.DeleteClient(1);
@@ -149,7 +149,7 @@ namespace RESTLayerTests
         {
             mockRepo.Setup(repo => repo.GetOrder(1))
                 .Throws(new Exception("Order not in database."));
-            var result = kbController.GetOrder(2,1);
+            var result = kbController.GetOrder(2, 1);
             Assert.IsType<NotFoundObjectResult>(result.Result);
         }
         [Fact]
@@ -161,7 +161,7 @@ namespace RESTLayerTests
             o.Id = 1;
             mockRepo.Setup(repo => repo.GetOrder(1))
                     .Returns(o);
-            var result = kbController.GetOrder(2,1);
+            var result = kbController.GetOrder(2, 1);
             Assert.IsType<OkObjectResult>(result.Result);
         }
         [Fact]
@@ -178,7 +178,7 @@ namespace RESTLayerTests
             Assert.Equal(Constants.URI + c.Id, (result.Value as ROrderOut).ClientId);
             Assert.Equal(Constants.URI + c.Id + "/Bestelling/" + o.Id, (result.Value as ROrderOut).OrderId);
             Assert.Equal(o.Amount, (result.Value as ROrderOut).Amount);
-            Assert.Equal(o.Product, Enum.Parse(typeof(Product),(result.Value as ROrderOut).Product));
+            Assert.Equal(o.Product, Enum.Parse(typeof(Product), (result.Value as ROrderOut).Product));
         }
         [Fact]
         public void POSTOrder_ValidObject_ReturnsCreatedAtAction()
@@ -191,8 +191,8 @@ namespace RESTLayerTests
             gettedOrder.Id = 1;
             ROrderIn oi = new ROrderIn(c.Id, "Duvel", o.Amount);
             mockRepo.Setup(repo => repo.GetClient(oi.ClientId)).Returns(c);
-            mockRepo.Setup(repo => repo.AddOrder(o,o.Id)).Returns(gettedOrder);
-            var response = kbController.PostOrder(oi.ClientId,oi);
+            mockRepo.Setup(repo => repo.AddOrder(o, o.Id)).Returns(gettedOrder);
+            var response = kbController.PostOrder(oi.ClientId, oi);
             Assert.IsType<CreatedAtActionResult>(response.Result);
         }
         [Fact]

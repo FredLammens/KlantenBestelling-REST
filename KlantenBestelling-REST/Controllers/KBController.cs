@@ -1,8 +1,8 @@
-﻿using System;
-using DomainLayer;
+﻿using DomainLayer;
 using KlantenBestelling_REST.BaseClasses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace KlantenBestelling_REST.Controllers
 {
@@ -24,18 +24,18 @@ namespace KlantenBestelling_REST.Controllers
         [HttpHead("{id}")]
         public ActionResult<RClientOut> GetClient(int id)
         {
-            logger.LogInformation(11,"GetClient Called");
+            logger.LogInformation(11, "GetClient Called");
             try
             {
                 return Mapper.ClientToRClientOut(dc.GetClient(id));
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
         }
         [HttpPost]
-        public ActionResult<RClientOut> PostClient([FromBody] RClientIn rClientIn) 
+        public ActionResult<RClientOut> PostClient([FromBody] RClientIn rClientIn)
         {
             logger.LogInformation(12, "PostClient Called");
             try
@@ -44,13 +44,13 @@ namespace KlantenBestelling_REST.Controllers
                 Client added = dc.AddClient(toAdd);
                 return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.ClientToRClientOut(added));
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
         }
         [HttpPut("{id}")]
-        public ActionResult<RClientOut> PutClient(int id, [FromBody] RClientIn rClientIn) 
+        public ActionResult<RClientOut> PutClient(int id, [FromBody] RClientIn rClientIn)
         {
             logger.LogInformation(13, "PutClient Called");
             try
@@ -68,21 +68,21 @@ namespace KlantenBestelling_REST.Controllers
                 RClientOut updatedClient = Mapper.ClientToRClientOut(dc.GetClient(toUpdate.Id));
                 return Ok(updatedClient);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteClient(int id) 
+        public IActionResult DeleteClient(int id)
         {
             logger.LogInformation(14, "DeleteClient Called");
-            try 
+            try
             {
                 dc.DeleteClient(id);
                 return NoContent();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
@@ -104,7 +104,7 @@ namespace KlantenBestelling_REST.Controllers
             }
         }
         [HttpPost("{clientId}/Bestelling")]
-        public ActionResult<ROrderOut> PostOrder(int clientId,[FromBody] ROrderIn rOrderIn)
+        public ActionResult<ROrderOut> PostOrder(int clientId, [FromBody] ROrderIn rOrderIn)
         {
             logger.LogInformation(22, "PostOrder Called");
             try
@@ -114,7 +114,7 @@ namespace KlantenBestelling_REST.Controllers
                 if (!Enum.IsDefined(typeof(Product), rOrderIn.Product))
                     return NotFound("product not found.");
                 Order toAdd = Mapper.ROrderInToOrder(rOrderIn, dc);
-                Order added = dc.AddOrder(toAdd,clientId);
+                Order added = dc.AddOrder(toAdd, clientId);
                 return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.OrderToROrderOut(added));
             }
             catch (Exception ex)
@@ -140,7 +140,7 @@ namespace KlantenBestelling_REST.Controllers
                     Order added = dc.AddOrder(toAdd, clientId);
                     return CreatedAtAction(nameof(GetClient), new { id = added.Id }, Mapper.OrderToROrderOut(added));
                 }
-                Order toUpdate = Mapper.ROrderInToOrder(rOrderIn,dc);
+                Order toUpdate = Mapper.ROrderInToOrder(rOrderIn, dc);
                 dc.UpdateOrder(toUpdate);
                 ROrderOut updatedOrder = Mapper.OrderToROrderOut(dc.GetOrder(toUpdate.Id));
                 return Ok(updatedOrder);

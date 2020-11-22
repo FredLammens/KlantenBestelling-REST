@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataLayer
+﻿namespace DataLayer
 {
     public class KlantenBestellingenTestContext : KlantenBestellingenContext
     {
@@ -18,7 +14,7 @@ namespace DataLayer
         {
             if (keepExistingDB)
                 Database.EnsureCreated();
-            else 
+            else
             {
                 Database.EnsureDeleted();
                 Database.EnsureCreated();

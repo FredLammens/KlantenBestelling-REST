@@ -56,7 +56,7 @@ namespace UnitTests
             Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
-            Client returned = uow.Clients.GetClient(client.Name,client.Address);
+            Client returned = uow.Clients.GetClient(client.Name, client.Address);
             returned.Id.ShouldBe(1);
             returned.Name.ShouldBe(client.Name);
             returned.Address.ShouldBe(client.Address);
@@ -69,14 +69,14 @@ namespace UnitTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database");
         }
         [TestMethod]
-        public void GetClientWithOrders() 
+        public void GetClientWithOrders()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test1234567");
             uow.Clients.AddClient(client);
             uow.Complete();
             Client returned = uow.Clients.GetClient(1);
-            uow.Orders.AddOrder(new Order(Product.Duvel, 10, returned),returned.Id);
+            uow.Orders.AddOrder(new Order(Product.Duvel, 10, returned), returned.Id);
             uow.Complete();
             Client returnedWithOrders = uow.Clients.GetClient(1);
             returnedWithOrders.GetOrders().Count.ShouldBe(1);
@@ -99,7 +99,7 @@ namespace UnitTests
             updatedReturned.Name.ShouldBe("Shabalaba");
         }
         [TestMethod]
-        public void UpdateClientNotInDatabaseTest() 
+        public void UpdateClientNotInDatabaseTest()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             Client client = new Client("TestName", "Test1234567");
@@ -107,7 +107,7 @@ namespace UnitTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database");
         }
         [TestMethod]
-        public void DeleteClientNormalNoExceptions() 
+        public void DeleteClientNormalNoExceptions()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             uow.Clients.AddClient(new Client("TestName", "Test1234567"));
@@ -116,7 +116,7 @@ namespace UnitTests
             act.ShouldNotThrow();
         }
         [TestMethod]
-        public void DeleteClientNotInDataBase() 
+        public void DeleteClientNotInDataBase()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             //uow.Clients.DeleteClient(1);
@@ -124,7 +124,7 @@ namespace UnitTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Client not in database.");
         }
         [TestMethod]
-        public void DeleteClientWithOrdersReturnException() 
+        public void DeleteClientWithOrdersReturnException()
         {
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
             uow.Clients.AddClient(new Client("TestName", "Test1234567"));

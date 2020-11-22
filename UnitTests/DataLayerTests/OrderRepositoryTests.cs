@@ -3,8 +3,6 @@ using DomainLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests.DataLayerTests
 {
@@ -12,7 +10,7 @@ namespace UnitTests.DataLayerTests
     public class OrderRepositoryTests
     {
         [TestMethod]
-        public void AddOrderNormalNoExceptionsTest() 
+        public void AddOrderNormalNoExceptionsTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -22,7 +20,7 @@ namespace UnitTests.DataLayerTests
             //
             Client gettedClient = uow.Clients.GetClient(1);
             Order order = new Order(Product.Duvel, 10, gettedClient);
-            Action act = () => uow.Orders.AddOrder(order,gettedClient.Id);
+            Action act = () => uow.Orders.AddOrder(order, gettedClient.Id);
             act.ShouldNotThrow();
             uow.Complete();
             Client returned = uow.Clients.GetClient(1);
@@ -48,7 +46,7 @@ namespace UnitTests.DataLayerTests
             act.ShouldThrow<Exception>().Message.ShouldBe("No clientId provided.");
         }
         [TestMethod]
-        public void GetOrderNormalNoExceptionTest() 
+        public void GetOrderNormalNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -68,7 +66,7 @@ namespace UnitTests.DataLayerTests
             gettedOrder.Client.ShouldBe(order.Client);
         }
         [TestMethod]
-        public void GetOrderNotInDataBaseTest() 
+        public void GetOrderNotInDataBaseTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -80,7 +78,7 @@ namespace UnitTests.DataLayerTests
         }
 
         [TestMethod]
-        public void UpdateOrderNormalNoExceptionTest() 
+        public void UpdateOrderNormalNoExceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -101,7 +99,7 @@ namespace UnitTests.DataLayerTests
             gettedOrder.Product.ShouldBe(Product.Westmalle);
         }
         [TestMethod]
-        public void UpdateOrderNotInDataseTest() 
+        public void UpdateOrderNotInDataseTest()
         {
 
             //init db
@@ -115,7 +113,7 @@ namespace UnitTests.DataLayerTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
         [TestMethod]
-        public void DeleteOrderNormalNoEXceptionTest() 
+        public void DeleteOrderNormalNoEXceptionTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));
@@ -134,7 +132,7 @@ namespace UnitTests.DataLayerTests
             act.ShouldThrow<Exception>().Message.ShouldBe("Order not in database.");
         }
         [TestMethod]
-        public void DeleteOrderNotInDatabaseTest() 
+        public void DeleteOrderNotInDatabaseTest()
         {
             //init db
             UnitOfWork uow = new UnitOfWork(new KlantenBestellingenTestContext(false));

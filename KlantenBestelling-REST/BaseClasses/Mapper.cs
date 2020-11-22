@@ -6,7 +6,7 @@ namespace KlantenBestelling_REST.BaseClasses
 {
     public class Mapper
     {
-        public static RClientOut ClientToRClientOut(Client client) 
+        public static RClientOut ClientToRClientOut(Client client)
         {
             return new RClientOut(client.Id.ToString(), client.Name, client.Address, OrdersToROrdersOutIds(client.GetOrders()));
         }
@@ -19,7 +19,7 @@ namespace KlantenBestelling_REST.BaseClasses
             }
             return rorders;
         }
-        public static ROrderOut OrderToROrderOut(Order order) 
+        public static ROrderOut OrderToROrderOut(Order order)
         {
             return new ROrderOut(order.Id.ToString(), order.Product.ToString("f"), order.Amount, order.Client.Id.ToString());
         }
@@ -29,7 +29,7 @@ namespace KlantenBestelling_REST.BaseClasses
             client.Id = rClientIn.ClientID;
             return client;
         }
-        public static Order ROrderInToOrder(ROrderIn rOrderIn, IDomainController dc) 
+        public static Order ROrderInToOrder(ROrderIn rOrderIn, IDomainController dc)
         {
             Product p = (Product)Enum.Parse(typeof(Product), rOrderIn.Product);
             Order order = new Order(p, rOrderIn.Amount, dc.GetClient(rOrderIn.ClientId));

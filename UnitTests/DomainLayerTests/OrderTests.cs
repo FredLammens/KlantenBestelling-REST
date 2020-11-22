@@ -2,8 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests.DomainLayerTests
 {
@@ -11,7 +9,7 @@ namespace UnitTests.DomainLayerTests
     public class OrderTests
     {
         [TestMethod]
-        public void TestSetAmount() 
+        public void TestSetAmount()
         {
             Client client = new Client("test", "tralalalala");
             Action act = () => new Order(Product.Westmalle, -10, client);

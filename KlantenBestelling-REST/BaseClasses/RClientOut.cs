@@ -17,14 +17,14 @@ namespace KlantenBestelling_REST.BaseClasses
         [JsonPropertyName("adres")]
         public string Address { get; set; }
         [JsonPropertyName("bestellingen")]
-        public List<ROrderOut> Orders { get; set; } = new List<ROrderOut>();
+        public List<string> OrdersIds { get; set; } = new List<string>();
 
-        public RClientOut(string clientIdString, string name, string address, List<ROrderOut> orders)
+        public RClientOut(string clientIdString, string name, string address, List<string> ordersIds)
         {
             ClientIdString = clientIdString;
             Name = name;
             Address = address;
-            Orders = orders;
+            OrdersIds = ordersIds;
         }
 
         public RClientOut()

@@ -8,14 +8,14 @@ namespace KlantenBestelling_REST.BaseClasses
     {
         public static RClientOut ClientToRClientOut(Client client) 
         {
-            return new RClientOut(client.Id.ToString(), client.Name, client.Address, OrdersToROrdersOut(client.GetOrders()));
+            return new RClientOut(client.Id.ToString(), client.Name, client.Address, OrdersToROrdersOutIds(client.GetOrders()));
         }
-        private static List<ROrderOut> OrdersToROrdersOut(IReadOnlyList<Order> orders) //iet smis met bestelling id => altijd 0
+        private static List<string> OrdersToROrdersOutIds(IReadOnlyList<Order> orders) //iet smis met bestelling id => altijd 0
         {
-            List<ROrderOut> rorders = new List<ROrderOut>();
+            List<string> rorders = new List<string>();
             foreach (var order in orders)
             {
-                rorders.Add(OrderToROrderOut(order));
+                rorders.Add(OrderToROrderOut(order).OrderId);
             }
             return rorders;
         }

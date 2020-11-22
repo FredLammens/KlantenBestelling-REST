@@ -183,11 +183,16 @@ namespace RESTLayerTests
         [Fact]
         public void POSTOrder_ValidObject_ReturnsCreatedAtAction()
         {
-            RClientIn client = new RClientIn("trala", "simpsonlaan 12");
-            Client clientRepo = new Client(client.Name, client.Address);
-            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
-            //Client added = dc.AddClient(toAdd);
-            var response = kbController.PostClient(client);
+            Client c = new Client("bart", "simpsonlaan 12");
+            c.Id = 2;
+            Order o = new Order(Product.Duvel, 10, c);
+            Order gettedOrder = new Order(Product.Duvel, 10, c);
+            gettedOrder.Client = c;
+            gettedOrder.Id = 1;
+            ROrderIn oi = new ROrderIn(c.Id, "Duvel", o.Amount);
+            mockRepo.Setup(repo => repo.GetClient(oi.ClientId)).Returns(c);
+            mockRepo.Setup(repo => repo.AddOrder(o,o.Id)).Returns(gettedOrder);
+            var response = kbController.PostOrder(oi.ClientId,oi);
             Assert.IsType<CreatedAtActionResult>(response.Result);
         }
         [Fact]
@@ -207,7 +212,7 @@ namespace RESTLayerTests
             Assert.Equal(c.Address, item.Address);
         }
         [Fact]
-        public void POSTOrder_InValidObject_ReturnsNotFound()
+        public void POSTOrder_InValidProduct_ReturnsNotFound()
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             kbController.ModelState.AddModelError("format error", "int expected");
@@ -215,13 +220,14 @@ namespace RESTLayerTests
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
-        public void PUTOrder_InValidObject_ReturnsBadRequest()
+        public void POSTOrder_InValidClientId_ReturnsBadRequest()
         {
             RClientIn c = new RClientIn("trala", "simpsonlaan 12");
             c.ClientID = 5;
             var response = kbController.PutClient(2, c);
             Assert.IsType<BadRequestResult>(response.Result);
         }
+        // todo 
         [Fact]
         public void PUTOrder_InValidObject_ReturnsNotFound()
         {

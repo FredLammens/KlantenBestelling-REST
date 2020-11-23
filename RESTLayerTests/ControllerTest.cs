@@ -49,7 +49,7 @@ namespace RESTLayerTests
             Assert.Equal(Constants.URI + 2, (result.Value as RClientOut).ClientIdString);
             Assert.Equal(c.Name, (result.Value as RClientOut).Name);
             Assert.Equal(c.Address, (result.Value as RClientOut).Address);
-            Assert.Equal(c.GetOrders().Count, (result.Value as RClientOut).Orders.Count);
+            Assert.Equal(c.GetOrders().Count, (result.Value as RClientOut).OrdersIds.Count);
         }
         [Fact]
         public void POSTClient_ValidObject_ReturnsCreatedAtAction()
@@ -191,83 +191,93 @@ namespace RESTLayerTests
             gettedOrder.Id = 1;
             ROrderIn oi = new ROrderIn(c.Id, "Duvel", o.Amount);
             mockRepo.Setup(repo => repo.GetClient(oi.ClientId)).Returns(c);
-            mockRepo.Setup(repo => repo.AddOrder(o, o.Id)).Returns(gettedOrder);
+            mockRepo.Setup(repo => repo.AddOrder(o, c.Id)).Returns(gettedOrder);
             var response = kbController.PostOrder(oi.ClientId, oi);
             Assert.IsType<CreatedAtActionResult>(response.Result);
         }
         [Fact]
         public void POSTOrder_ValidObject_ReturnsCorrectItem()
         {
-            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
-            c.ClientID = 2;
-            Client clientRepo = new Client(c.Name, c.Address);
-            clientRepo.Id = 2;
-            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
-            var tussenResponse = kbController.PostClient(c);
-            var response = tussenResponse.Result as CreatedAtActionResult;
-            var item = response.Value as RClientOut;
-            Assert.IsType<RClientOut>(item);
-            Assert.Equal(Constants.URI + 2, item.ClientIdString);
-            Assert.Equal(c.Name, item.Name);
-            Assert.Equal(c.Address, item.Address);
+            Client c = new Client("bart", "simpsonlaan 12");
+            c.Id = 2;
+            Order o = new Order(Product.Duvel, 10, c);
+            Order gettedOrder = new Order(Product.Duvel, 10, c);
+            gettedOrder.Client = c;
+            gettedOrder.Id = 1;
+            ROrderIn oi = new ROrderIn(c.Id, "Duvel", o.Amount) { OrderId = 1 };
+            mockRepo.Setup(repo => repo.GetClient(oi.ClientId)).Returns(c);
+            mockRepo.Setup(repo => repo.AddOrder(o, c.Id)).Returns(gettedOrder);
+
+            var response = kbController.PostOrder(oi.ClientId, oi).Result as CreatedAtActionResult;
+            Assert.Equal(oi.Amount, (response.Value as ROrderOut).Amount);
+            Assert.Equal(Constants.URI + oi.ClientId, (response.Value as ROrderOut).ClientId);//
+            Assert.Equal(Constants.URI + oi.ClientId +  "/Bestelling/"  +  oi.OrderId, (response.Value as ROrderOut).OrderId);
+            Assert.Equal(oi.Product, (response.Value as ROrderOut).Product);
         }
         [Fact]
         public void POSTOrder_InValidProduct_ReturnsNotFound()
         {
-            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
+            ROrderIn o = new ROrderIn(2,"Duvel", 10);
             kbController.ModelState.AddModelError("format error", "int expected");
-            var response = kbController.PostClient(c).Result;
+            var response = kbController.PostOrder(2,o).Result;
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
         public void POSTOrder_InValidClientId_ReturnsBadRequest()
         {
-            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
-            c.ClientID = 5;
-            var response = kbController.PutClient(2, c);
-            Assert.IsType<BadRequestResult>(response.Result);
+            ROrderIn o = new ROrderIn(2, "Duvel", 10);
+            var response = kbController.PostOrder(3, o).Result;
+            Assert.IsType<BadRequestObjectResult>(response);
         }
-        // todo 
         [Fact]
-        public void PUTOrder_InValidObject_ReturnsNotFound()
+        public void PUTOrder_InValidObjectNull_ReturnsBadRequest()
         {
-            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
-            c.ClientID = 2;
-            kbController.ModelState.AddModelError("simulated exception", "duno client already in db");
-            var response = kbController.PutClient(2, c).Result;
+            var response = kbController.PutClient(2, null).Result;
+            Assert.IsType<BadRequestResult>(response);
+        }
+        [Fact]
+        public void PUTOrder_InValidObjectProduct_ReturnsNotFound()
+        {
+            ROrderIn o = new ROrderIn(2, "Duff", 10);
+            o.OrderId = 1;
+            mockRepo.Setup(repo => repo.IsInOrders(1)).Returns(false);
+            var response = kbController.PutOrder(2,1,o);
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
-        public void PUTOrder_InValidId_ReturnsNotFound()
+        public void PUTOrder_InValidObjectException_ReturnsNotFound()
         {
-            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
-            c.ClientID = 2;
-            Client clientRepo = new Client(c.Name, c.Address);
-            clientRepo.Id = 2;
-            mockRepo.Setup(repo => repo.UpdateClient(clientRepo)).Throws(new Exception("Client not in DB."));
-            var response = kbController.PutClient(2, c).Result;
+            ROrderIn o = new ROrderIn(2, "Duff", 10);
+            o.OrderId = 1;
+            mockRepo.Setup(repo => repo.IsInOrders(1)).Throws(new Exception());
+            var response = kbController.PutOrder(2, 1, o);
             Assert.IsType<NotFoundObjectResult>(response);
         }
         [Fact]
         public void PUTOrder_ValidObject_ReturnsCorrectItem()
         {
-            RClientIn c = new RClientIn("trala", "simpsonlaan 12");
-            c.ClientID = 2;
-            Client clientRepo = new Client(c.Name, c.Address);
-            clientRepo.Id = 2;
-            mockRepo.Setup(repo => repo.AddClient(clientRepo)).Returns(clientRepo);
-            var tussenResponse = kbController.PutClient(2, c);
-            var response = tussenResponse.Result as CreatedAtActionResult;
-            var item = response.Value as RClientOut;
-            Assert.IsType<RClientOut>(item);
-            Assert.Equal(Constants.URI + 2, item.ClientIdString);
-            Assert.Equal(c.Name, item.Name);
-            Assert.Equal(c.Address, item.Address);
+            Client c = new Client("bart", "simpsonlaan 12");
+            c.Id = 2;
+            Order o = new Order(Product.Duvel, 10, c);
+            o.Id = 1;
+            Order gettedOrder = new Order(Product.Duvel, 10, c);
+            gettedOrder.Client = c;
+            gettedOrder.Id = 1;
+            ROrderIn oi = new ROrderIn(c.Id, "Duvel", o.Amount) { OrderId = 1 };
+            mockRepo.Setup(repo => repo.GetClient(oi.ClientId)).Returns(c);
+            mockRepo.Setup(repo => repo.UpdateOrder(o)).Returns(gettedOrder);
+            mockRepo.Setup(repo => repo.IsInOrders(o.Id)).Returns(true);
+            mockRepo.Setup(repo => repo.GetOrder(o.Id)).Returns(o);
+            var response = kbController.PutOrder(oi.ClientId,o.Id, oi) as OkObjectResult;
+            Assert.Equal(oi.Amount, (response.Value as ROrderOut).Amount);
+            Assert.Equal(Constants.URI + oi.ClientId, (response.Value as ROrderOut).ClientId);//
+            Assert.Equal(Constants.URI + oi.ClientId + "/Bestelling/" + oi.OrderId, (response.Value as ROrderOut).OrderId);
+            Assert.Equal(oi.Product, (response.Value as ROrderOut).Product);
         }
         [Fact]
         public void DeleteOrder_ValidObject_ReturnsNoContent()
         {
-            var result = kbController.DeleteClient(1);
+            var result = kbController.DeleteOrder(1,1);
             Assert.IsType<NoContentResult>(result);
 
         }
@@ -275,7 +285,7 @@ namespace RESTLayerTests
         public void DeleteOrder_InValidObject_ReturnsNotFound()
         {
             kbController.ModelState.AddModelError("simulated exception", "duno client not in db");
-            var result = kbController.DeleteClient(1);
+            var result = kbController.DeleteOrder(1,1);
             Assert.IsType<NoContentResult>(result);
         }
         #endregion

@@ -40,7 +40,7 @@ namespace KlantenBestelling_REST.Controllers
             logger.LogInformation(11, "GetClient Called");
             try
             {
-                return Mapper.ClientToRClientOut(dc.GetClient(id));
+                return Ok(Mapper.ClientToRClientOut(dc.GetClient(id)));
             }
             catch (Exception ex)
             {
@@ -180,8 +180,6 @@ namespace KlantenBestelling_REST.Controllers
                     return BadRequest();
                 if (!dc.IsInOrders(orderId))
                 {
-                    if (rOrderIn.ClientId != clientId)
-                        return BadRequest("Input is invalid");
                     if (!Enum.IsDefined(typeof(Product), rOrderIn.Product))
                         return NotFound("product not found.");
                     Order toAdd = Mapper.ROrderInToOrder(rOrderIn, dc);
